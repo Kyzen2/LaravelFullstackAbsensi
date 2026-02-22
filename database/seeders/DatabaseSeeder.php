@@ -99,5 +99,16 @@ class DatabaseSeeder extends Seeder
             'jam_mulai' => '07:00:00',
             'jam_selesai' => '09:00:00',
         ]);
+
+        // Tambah jadwal buat hari ini (Minggu) biar bisa ditest
+        Jadwal::create([
+            'kelas_id' => $kelas->id,
+            'mapel_id' => $mapel->id,
+            'guru_id' => $guru->id,
+            'lokasi_id' => $lokasi->id,
+            'hari' => 'Minggu',
+            'jam_mulai' => '07:00:00',
+            'jam_selesai' => '23:59:00',
+        ]);
     }
 }
