@@ -28,6 +28,27 @@
 
                 <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-3xl">
                     <div class="max-w-xl">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Keluar Akun</h3>
+
+                        <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-700">Logout dari perangkat ini</p>
+                                <p class="text-xs text-gray-400">Anda perlu login kembali setelah keluar</p>
+                            </div>
+
+                            <form method="POST" action="{{ route('logout') }}" class="w-full sm:w-auto">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full sm:w-auto px-4 py-2 bg-red-600 text-white text-sm font-bold rounded-xl hover:bg-red-700 active:scale-95 transition-all duration-150 shadow-md">
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-3xl">
+                    <div class="max-w-xl">
                         <div class="p-4 bg-red-50 rounded-2xl border border-red-100">
                             @include('profile.partials.delete-user-form')
                         </div>
