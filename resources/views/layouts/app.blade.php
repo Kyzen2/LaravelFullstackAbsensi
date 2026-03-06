@@ -25,11 +25,20 @@
 
         {{-- Page Header --}}
         @isset($header)
-        <header class="bg-slate-800/70 backdrop-blur-md border-b border-slate-700">
-            <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
-                <h1 class="text-xl sm:text-2xl font-semibold text-white">
+        <header class="bg-slate-800/70 backdrop-blur-md border-b border-slate-700 sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                <h1 class="text-xl sm:text-2xl font-semibold text-white truncate mr-4">
                     {{ $header }}
                 </h1>
+                
+                {{-- Logout Button Desktop/Header --}}
+                <form method="POST" action="{{ route('logout') }}" class="flex-shrink-0">
+                    @csrf
+                    <button type="submit" class="flex items-center px-4 py-2 bg-slate-700/50 hover:bg-red-600/20 text-slate-300 hover:text-red-400 border border-slate-600 hover:border-red-500/50 rounded-xl transition-all text-xs font-black uppercase tracking-widest active:scale-95">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        Keluar
+                    </button>
+                </form>
             </div>
         </header>
         @endisset
