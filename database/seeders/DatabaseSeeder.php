@@ -89,26 +89,18 @@ class DatabaseSeeder extends Seeder
             'nama_mapel' => 'Pemrograman Web',
         ]);
 
-        // 9. Jadwal
-        Jadwal::create([
-            'kelas_id' => $kelas->id,
-            'mapel_id' => $mapel->id,
-            'guru_id' => $guru->id,
-            'lokasi_id' => $lokasi->id,
-            'hari' => 'Senin',
-            'jam_mulai' => '07:00:00',
-            'jam_selesai' => '09:00:00',
-        ]);
-
-        // Tambah jadwal buat hari ini (Minggu) biar bisa ditest
-        Jadwal::create([
-            'kelas_id' => $kelas->id,
-            'mapel_id' => $mapel->id,
-            'guru_id' => $guru->id,
-            'lokasi_id' => $lokasi->id,
-            'hari' => 'Minggu',
-            'jam_mulai' => '07:00:00',
-            'jam_selesai' => '23:59:00',
-        ]);
+        // 9. Jadwal (Buat tiap hari buat testing)
+        $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+        foreach ($days as $day) {
+            Jadwal::create([
+                'kelas_id' => $kelas->id,
+                'mapel_id' => $mapel->id,
+                'guru_id' => $guru->id,
+                'lokasi_id' => $lokasi->id,
+                'hari' => $day,
+                'jam_mulai' => '00:00:00',
+                'jam_selesai' => '23:59:59',
+            ]);
+        }
     }
 }

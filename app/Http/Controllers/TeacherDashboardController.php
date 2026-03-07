@@ -16,11 +16,11 @@ class TeacherDashboardController extends Controller
     {
         $guru = Auth::user()->guru;
         
-        // Get today's schedules for this teacher
-        $hariIni = $this->getHariIndonesia(now()->format('l'));
+        // Get all schedules for this teacher
         $schedules = Jadwal::with(['kelas', 'mapel', 'lokasi'])
             ->where('guru_id', $guru->id)
-            ->where('hari', $hariIni)
+            ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')")
+            ->orderBy('jam_mulai')
             ->get();
 
         // Count total students present today for this teacher
@@ -33,6 +33,53 @@ class TeacherDashboardController extends Controller
         ];
 
         return view('teacher.dashboard', compact('schedules', 'todayStats'));
+    }
+
+    public function currentQr()
+    {
+        $guru = Auth::user()->guru;
+        $hariIni = $this->getHariIndonesia(now()->format('l'));
+        $sekarang = now()->format('H:i:s');
+
+        // Find active schedule right now
+        $jadwal = Jadwal::where('guru_id', $guru->id)
+            ->where('hari', $hariIni)
+            ->where('jam_mulai', '<=', $sekarang)
+            ->where('jam_selesai', '>=', $sekarang)
+            ->first();
+
+        if (!$jadwal) {
+            return view('teacher.qr-not-found');
+        }
+
+        // Get or create session for today
+        $sesi = SesiPresensi::firstOrCreate(
+            [
+                'jadwal_id' => $jadwal->id,
+                'tanggal' => now()->format('Y-m-d'),
+            ],
+            [
+                'token_qr' => Str::random(40),
+            ]
+        );
+
+        return view('teacher.qr-current', compact('sesi', 'jadwal'));
+    }
+
+    public function refreshToken(SesiPresensi $sesi)
+    {
+        // Only owner can refresh
+        if ($sesi->jadwal->guru_id !== Auth::user()->guru->id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $sesi->update([
+            'token_qr' => Str::random(40)
+        ]);
+
+        return response()->json([
+            'token' => $sesi->token_qr
+        ]);
     }
 
     public function generateQr(Jadwal $jadwal)
@@ -53,7 +100,7 @@ class TeacherDashboardController extends Controller
         return view('teacher.qr-display', compact('sesi', 'jadwal'));
     }
 
-    private function getHariIndonesia($day)
+    public static function getHariIndonesiaStatic($day)
     {
         $days = [
             'Sunday' => 'Minggu',
@@ -64,6 +111,11 @@ class TeacherDashboardController extends Controller
             'Friday' => 'Jumat',
             'Saturday' => 'Sabtu'
         ];
-        return $days[$day];
+        return $days[$day] ?? $day;
+    }
+
+    private function getHariIndonesia($day)
+    {
+        return self::getHariIndonesiaStatic($day);
     }
 }

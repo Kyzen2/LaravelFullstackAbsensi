@@ -9,8 +9,18 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Header Section -->
             <div class="mb-8">
-                <h1 class="text-2xl font-black text-gray-800 tracking-tight">Halo, {{ Auth::user()->name }}</h1>
+                <h1 class="text-2xl font-black text-gray-800 tracking-tight">Halo, {{ Auth::user()->name }} 👋</h1>
                 <p class="text-gray-400 text-xs font-bold mt-1 uppercase tracking-widest leading-none">Siap belajar hari ini?</p>
+                
+                <!-- Real-time Clock -->
+                <div class="mt-6 inline-flex flex-col bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                    <div id="realtime-clock" class="text-4xl font-black text-gray-800 tracking-tighter tabular-nums">
+                        00:00:00
+                    </div>
+                    <div id="realtime-date" class="text-[9px] font-black uppercase tracking-[0.3em] text-blue-600 mt-1">
+                        Loading date...
+                    </div>
+                </div>
             </div>
 
             <!-- Stats Grid -->
@@ -86,6 +96,32 @@
                     @endforeach
                 </div>
             @endif
-        </div>
-    </div>
+
+    @push('scripts')
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const day = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+
+            const timeEl = document.getElementById('realtime-clock');
+            const dateEl = document.getElementById('realtime-date');
+            
+            if (timeEl) timeEl.textContent = `${hours}:${minutes}:${seconds}`;
+            if (dateEl) dateEl.textContent = `${dayName}, ${day} ${monthName} ${year}`;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+    @endpush
 </x-app-layout>
