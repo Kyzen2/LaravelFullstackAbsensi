@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Request;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,8 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (str_contains(config('app.url'), 'https://') || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
-        }
+        if (env('APP_ENV') !== 'local' || request()->server('HTTP_X_FORWARDED_PROTO') == 'https') {
+        URL::forceScheme('https');
+    }
     }
 }
