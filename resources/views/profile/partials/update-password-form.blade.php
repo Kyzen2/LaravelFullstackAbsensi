@@ -1,11 +1,11 @@
-<section>
+<section class="space-y-8">
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Update Password') }}
+        <h2 class="text-xl font-black text-white tracking-tight">
+            {{ __('Perbarui Password') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
+        <p class="mt-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 opacity-70 italic">
+            {{ __('Pastikan akun Anda menggunakan password yang panjang dan acak agar tetap aman.') }}
         </p>
     </header>
 
@@ -40,8 +40,8 @@
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                    class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400"
+                >{{ __('Tersimpan.') }}</p>
             @endif
         </div>
     </form>

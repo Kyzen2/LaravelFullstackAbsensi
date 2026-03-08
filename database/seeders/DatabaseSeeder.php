@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
         // 4. Guru
         $userGuru = User::create([
             'serial_number' => '123456',
-            'name' => 'Budi Guru',
+            'name' => 'Budi',
             'password' => Hash::make('password'),
             'role' => 'guru',
         ]);

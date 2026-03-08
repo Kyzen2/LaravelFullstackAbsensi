@@ -12,6 +12,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/teacher/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+    Route::get('/teacher/schedule', [TeacherDashboardController::class, 'schedule'])->name('teacher.schedule');
     Route::get('/teacher/qr-current', [TeacherDashboardController::class, 'currentQr'])->name('teacher.qr.current');
     Route::post('/teacher/qr-refresh/{sesi}', [TeacherDashboardController::class, 'refreshToken'])->name('teacher.qr.refresh');
     Route::get('/teacher/qr/{jadwal}', [TeacherDashboardController::class, 'generateQr'])->name('teacher.qr');

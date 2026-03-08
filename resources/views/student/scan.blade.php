@@ -1,91 +1,112 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Scan QR Kehadiran') }}
-        </h2>
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 border border-indigo-500/20">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+            </div>
+            <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
+                Attendance Scan
+            </h2>
+        </div>
     </x-slot>
 
-    <div class="py-8 bg-gray-900 min-h-screen pb-32">
-        <div class="max-w-md mx-auto px-6">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-10">
-                <div class="flex items-center">
-                    <a href="{{ route('student.dashboard') }}" class="p-4 bg-white/10 rounded-2xl text-white mr-4 active:scale-95 transition-all">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+    <div class="py-10 min-h-[90vh] flex flex-col items-center justify-center bg-[#020617] relative overflow-hidden pb-40">
+        <!-- Background Orbs -->
+        <div class="absolute top-0 right-0 -mr-32 -mt-32 w-96 h-96 bg-indigo-500/10 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-0 left-0 -ml-32 -mb-32 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full"></div>
+
+        <div class="max-w-md w-full px-6 space-y-10 relative z-10">
+            <!-- Header Section -->
+            <div class="flex items-center justify-between">
+                <div class="space-y-1">
+                    <h2 class="text-3xl font-black text-white tracking-tighter uppercase leading-none">QR Scanner</h2>
+                    <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] italic">Mark Presence Instantly</p>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button id="switch-camera" class="w-12 h-12 glass-card rounded-2xl flex items-center justify-center text-slate-400 border-white/10 hover:text-indigo-400 hover:bg-indigo-500/10 transition-all active:scale-95">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+                    </button>
+                    <a href="{{ route('student.dashboard') }}" class="hidden sm:flex w-12 h-12 glass-card rounded-2xl items-center justify-center text-slate-400 border-white/10 hover:text-rose-400 hover:bg-rose-500/10 transition-all active:scale-95">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </a>
-                    <div>
-                        <h2 class="text-2xl font-black text-white tracking-tight">QR Scanner</h2>
-                        <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em]">Mark Presence</p>
-                    </div>
                 </div>
-                <!-- Camera Switch Button -->
-                <button id="switch-camera" class="p-4 bg-white/10 rounded-2xl text-white active:scale-95 transition-all flex items-center justify-center">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                </button>
             </div>
 
-            <!-- Scanner Box -->
-            <div class="relative group">
-                <div id="reader-container" class="relative overflow-hidden rounded-[2.5rem] border-4 border-gray-800 bg-black aspect-square shadow-2xl shadow-indigo-500/10">
-                    <div id="reader" style="width: 100%"></div>
+            <!-- Scanner Container -->
+            <div class="relative aspect-square group">
+                <!-- Floating Decorative Border -->
+                <div class="absolute -inset-4 bg-gradient-to-br from-indigo-500/20 to-emerald-500/20 rounded-[3rem] blur-2xl opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+                
+                <div id="reader-container" class="relative w-full h-full rounded-[2.5rem] border border-white/10 bg-black/40 backdrop-blur-3xl overflow-hidden shadow-2xl">
+                    <div id="reader" class="w-full h-full"></div>
                     
-                    <!-- Scanner Overlays -->
-                    <div class="absolute inset-0 z-10 pointer-events-none">
-                        <!-- Corner Accents -->
-                        <div class="absolute top-10 left-10 w-10 h-10 border-t-4 border-l-4 border-indigo-500 rounded-tl-xl opacity-80"></div>
-                        <div class="absolute top-10 right-10 w-10 h-10 border-t-4 border-r-4 border-indigo-500 rounded-tr-xl opacity-80"></div>
-                        <div class="absolute bottom-10 left-10 w-10 h-10 border-b-4 border-l-4 border-indigo-500 rounded-bl-xl opacity-80"></div>
-                        <div class="absolute bottom-10 right-10 w-10 h-10 border-b-4 border-r-4 border-indigo-500 rounded-br-xl opacity-80"></div>
-                        
-                        <!-- Scanning Laser Line -->
-                        <div class="absolute top-0 left-0 right-0 h-1 bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,1)] animate-scan-line"></div>
-                    </div>
-                </div>
+                    <!-- Premium Overlays -->
+                    <div class="absolute inset-0 z-20 pointer-events-none flex flex-col items-center justify-center">
+                        <div class="relative w-64 h-64">
+                            <!-- Corners -->
+                            <div class="absolute top-0 left-0 w-8 h-8 border-t-[3px] border-l-[3px] border-indigo-400 rounded-tl-2xl shadow-[0_0_15px_rgba(129,140,248,0.5)]"></div>
+                            <div class="absolute top-0 right-0 w-8 h-8 border-t-[3px] border-r-[3px] border-indigo-400 rounded-tr-2xl shadow-[0_0_15px_rgba(129,140,248,0.5)]"></div>
+                            <div class="absolute bottom-0 left-0 w-8 h-8 border-b-[3px] border-l-[3px] border-indigo-400 rounded-bl-2xl shadow-[0_0_15px_rgba(129,140,248,0.5)]"></div>
+                            <div class="absolute bottom-0 right-0 w-8 h-8 border-b-[3px] border-r-[3px] border-indigo-400 rounded-br-2xl shadow-[0_0_15px_rgba(129,140,248,0.5)]"></div>
+                            
+                            <!-- Laser -->
+                            <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-400 to-transparent shadow-[0_0_20px_rgba(129,140,248,0.8)] animate-scan-slow"></div>
+                        </div>
 
-                <!-- Result Card -->
-                <div id="result" class="mt-8 text-center p-8 bg-indigo-600 rounded-[2rem] shadow-2xl hidden transform animate-bounce-in">
-                    <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <!-- Status Label -->
+                        <div id="status-label" class="absolute bottom-10 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full glass-card border-white/10 text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 shadow-xl">
+                            Scanner Active
+                        </div>
                     </div>
-                    <p class="text-xl font-black text-white tracking-tight uppercase">Processing...</p>
                 </div>
             </div>
 
-            <!-- Footer Info -->
-            <div class="mt-12 p-6 bg-white/5 rounded-[2rem] border border-white/10 flex items-start space-x-4">
-                <div class="p-3 bg-indigo-500/20 rounded-xl text-indigo-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <!-- Context Info -->
+            <div class="glass-card p-6 rounded-[2rem] border-white/5 flex items-center gap-5">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 <div>
-                    <h4 class="text-white font-black text-xs uppercase tracking-widest mb-1">How it works</h4>
-                    <p class="text-gray-500 text-[11px] font-medium leading-relaxed">Align the QR code within the frame to automatically log your attendance.</p>
+                    <h4 class="text-white font-black text-xs uppercase tracking-widest mb-0.5">Focus Required</h4>
+                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-wider opacity-60">Pastikan Kode QR berada dalam kotak fokus.</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Processing Overlay -->
+    <div id="result-overlay" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#020617]/90 backdrop-blur-xl hidden">
+        <div class="glass-card p-12 rounded-[3.5rem] border-indigo-500/20 text-center max-w-xs w-full shadow-2xl">
+            <div id="status-icon" class="w-20 h-20 bg-indigo-500/10 rounded-[2rem] flex items-center justify-center mx-auto mb-8 border border-indigo-500/20 transition-all duration-500">
+                <svg class="w-10 h-10 text-indigo-400 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            </div>
+            <h3 id="result-title" class="text-2xl font-black text-white tracking-tight uppercase mb-2">Processing</h3>
+            <p id="result-subtitle" class="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">Verifying Presence Data</p>
+        </div>
+    </div>
+
     <style>
         #reader { border: none !important; }
-        #reader video { object-fit: cover !important; border-radius: 2rem !important; }
+        #reader video { width: 100% !important; height: 100% !important; object-fit: cover !important; }
         #reader__dashboard { display: none !important; }
         
-        @keyframes scan {
-            0% { top: 15% }
-            50% { top: 85% }
-            100% { top: 15% }
+        @keyframes scan-slow {
+            0% { top: 0%; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
         }
-        .animate-scan-line {
-            animation: scan 3s ease-in-out infinite;
-            width: 80%;
-            left: 10%;
+        .animate-scan-slow {
+            animation: scan-slow 3s ease-in-out infinite;
         }
 
-        @keyframes bounceIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
+        #reader__scan_region {
+            background: transparent !important;
         }
-        .animate-bounce-in {
-            animation: bounceIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+
+        #reader__camera_selection, #reader__dashboard_section_csr button {
+            display: none !important;
         }
     </style>
 
@@ -94,7 +115,7 @@
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let html5QrCode;
-        let currentFacingMode = "environment"; // Default to back camera
+        let currentFacingMode = "environment";
         
         function playBeep() {
             const oscillator = audioCtx.createOscillator();
@@ -104,46 +125,73 @@
             oscillator.type = 'sine';
             oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); 
             gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.01);
+            gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.01);
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
             oscillator.start(audioCtx.currentTime);
             oscillator.stop(audioCtx.currentTime + 0.3);
         }
 
-        function onScanSuccess(decodedText, decodedResult) {
+        function onScanSuccess(decodedText) {
             playBeep();
-            html5QrCode.stop().then(() => {
-                document.getElementById('result').classList.remove('hidden');
-                fetch("{{ route('attendance.process') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        token_qr: decodedText,
-                        latitude: -6.175392, 
-                        longitude: 106.827153
+            if(html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    showOverlay("Success", "Presence Captured!", "emerald");
+                    
+                    fetch("{{ route('attendance.process') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            token_qr: decodedText,
+                            latitude: -6.175392, 
+                            longitude: 106.827153
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Absensi Berhasil!');
-                        window.location.href = "{{ route('student.dashboard') }}";
-                    } else {
-                        alert('Gagal: ' + data.message);
-                        location.reload();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan sistem.');
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            setTimeout(() => {
+                                window.location.href = "{{ route('student.dashboard') }}";
+                            }, 1000);
+                        } else {
+                            showOverlay("Failed", data.message, "rose");
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    })
+                    .catch(error => {
+                        showOverlay("Error", "System error occurred.", "rose");
+                        setTimeout(() => location.reload(), 2000);
+                    });
                 });
-            });
+            }
         }
 
-        const qrConfig = { fps: 10, qrbox: { width: 250, height: 250 } };
+        function showOverlay(title, subtitle, color) {
+            const overlay = document.getElementById('result-overlay');
+            const icon = document.getElementById('status-icon');
+            const titleEl = document.getElementById('result-title');
+            const subtitleEl = document.getElementById('result-subtitle');
+            
+            overlay.classList.remove('hidden');
+            titleEl.textContent = title;
+            subtitleEl.textContent = subtitle;
+            
+            if(color === "emerald") {
+                icon.innerHTML = '<svg class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>';
+                icon.className = 'w-20 h-20 bg-emerald-500/10 rounded-[2rem] flex items-center justify-center mx-auto mb-8 border border-emerald-500/20 transition-all';
+                titleEl.className = 'text-2xl font-black text-emerald-400 tracking-tight uppercase mb-2';
+            } else if(color === "rose") {
+                icon.innerHTML = '<svg class="w-10 h-10 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>';
+                icon.className = 'w-20 h-20 bg-rose-500/10 rounded-[2rem] flex items-center justify-center mx-auto mb-8 border border-rose-500/20 transition-all';
+                titleEl.className = 'text-2xl font-black text-rose-400 tracking-tight uppercase mb-2';
+            }
+        }
+
+        const qrConfig = { fps: 30, qrbox: { width: 250, height: 250 } };
 
         function startScanner(facingMode) {
             html5QrCode = new Html5Qrcode("reader");
@@ -152,7 +200,7 @@
                 qrConfig, 
                 onScanSuccess
             ).catch(err => {
-                console.error("Unable to start scanning", err);
+                console.error("Scanner failed", err);
             });
         }
 
@@ -161,11 +209,10 @@
                 html5QrCode.stop().then(() => {
                     currentFacingMode = (currentFacingMode === "environment") ? "user" : "environment";
                     startScanner(currentFacingMode);
-                }).catch(err => console.error("Error stopping scanner", err));
+                });
             }
         });
 
-        // Initialize scanner on load
         document.addEventListener('DOMContentLoaded', () => {
             startScanner(currentFacingMode);
         });

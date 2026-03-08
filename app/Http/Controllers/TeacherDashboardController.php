@@ -15,6 +15,8 @@ class TeacherDashboardController extends Controller
     public function index()
     {
         $guru = Auth::user()->guru;
+        $hariIni = $this->getHariIndonesia(now()->format('l'));
+        $sekarang = now()->format('H:i:s');
         
         // Get all schedules for this teacher
         $schedules = Jadwal::with(['kelas', 'mapel', 'lokasi'])
@@ -22,6 +24,12 @@ class TeacherDashboardController extends Controller
             ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')")
             ->orderBy('jam_mulai')
             ->get();
+
+        // Get only today's schedule to find the "next" one
+        $todaySchedules = $schedules->where('hari', $hariIni);
+        
+        // Find next schedule (first today where jam_mulai > now)
+        $nextSchedule = $todaySchedules->where('jam_mulai', '>', $sekarang)->first();
 
         // Count total students present today for this teacher
         $todayStats = [
@@ -32,7 +40,7 @@ class TeacherDashboardController extends Controller
             })->count()
         ];
 
-        return view('teacher.dashboard', compact('schedules', 'todayStats'));
+        return view('teacher.dashboard', compact('schedules', 'todayStats', 'nextSchedule', 'hariIni'));
     }
 
     public function currentQr()
@@ -98,6 +106,20 @@ class TeacherDashboardController extends Controller
         }
 
         return view('teacher.qr-display', compact('sesi', 'jadwal'));
+    }
+
+    public function schedule()
+    {
+        $guru = Auth::user()->guru;
+        $hariIni = $this->getHariIndonesia(now()->format('l'));
+
+        $schedules = Jadwal::with(['kelas', 'mapel', 'lokasi'])
+            ->where('guru_id', $guru->id)
+            ->where('hari', $hariIni)
+            ->orderBy('jam_mulai')
+            ->get();
+
+        return view('teacher.schedule', compact('schedules', 'hariIni'));
     }
 
     public static function getHariIndonesiaStatic($day)

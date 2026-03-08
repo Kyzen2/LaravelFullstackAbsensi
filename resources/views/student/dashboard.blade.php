@@ -1,101 +1,122 @@
     <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard Siswa') }}
-        </h2>
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 border border-indigo-500/20">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg>
+            </div>
+            <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
+                Student Hub
+            </h2>
+        </div>
     </x-slot>
 
-    <div class="py-6 bg-gray-50 min-h-screen pb-24">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Header Section -->
-            <div class="mb-8">
-                <h1 class="text-2xl font-black text-gray-800 tracking-tight">Halo, {{ Auth::user()->name }} 👋</h1>
-                <p class="text-gray-400 text-xs font-bold mt-1 uppercase tracking-widest leading-none">Siap belajar hari ini?</p>
+    <div class="py-6 space-y-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            
+            <!-- Hero Header -->
+            <div class="relative overflow-hidden rounded-[40px] glass-card p-8 sm:p-12 border-white/5">
+                <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full"></div>
                 
-                <!-- Real-time Clock -->
-                <div class="mt-6 inline-flex flex-col bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm">
-                    <div id="realtime-clock" class="text-4xl font-black text-gray-800 tracking-tighter tabular-nums">
-                        00:00:00
+                <div class="relative space-y-8">
+                    <div class="space-y-2">
+                        <h1 class="text-4xl sm:text-5xl font-black text-white tracking-tight leading-none">
+                            Halo, <span class="text-indigo-400">{{ Auth::user()->name }}</span> 👋
+                        </h1>
+                        <p class="text-slate-400 text-lg font-medium italic opacity-80">Siap belajar hal baru hari ini?</p>
                     </div>
-                    <div id="realtime-date" class="text-[9px] font-black uppercase tracking-[0.3em] text-blue-600 mt-1">
-                        Loading date...
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-2 gap-4 mb-8">
-                <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-between h-32">
-                    <div class="flex items-center justify-between">
-                        <div class="p-2 bg-blue-50 rounded-xl text-blue-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    
+                    <!-- Real-time Clock -->
+                    <div class="inline-flex flex-col p-6 rounded-3xl bg-white/5 border border-white/5 backdrop-blur-xl">
+                        <div id="realtime-clock" class="text-5xl sm:text-6xl font-black text-white tracking-tighter tabular-nums leading-none">
+                            00:00:00
                         </div>
-                        <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest leading-none">Total</span>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-black text-gray-800 tracking-tighter leading-none">{{ $stats['total_absen'] }}</h3>
-                        <p class="text-gray-400 text-[10px] font-bold mt-1">Kehadiran</p>
-                    </div>
-                </div>
-                <div class="bg-blue-600 p-5 rounded-3xl shadow-xl shadow-blue-100 flex flex-col justify-between h-32 relative overflow-hidden group">
-                    <div class="flex items-center justify-between relative z-10">
-                        <div class="p-2 bg-white/20 rounded-xl text-white backdrop-blur-md">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <div id="realtime-date" class="text-xs font-bold uppercase tracking-[0.4em] text-indigo-400/80 mt-3 pl-1">
+                            Loading date...
                         </div>
-                        <span class="text-[9px] font-black text-blue-100 uppercase tracking-widest leading-none">Bulan Ini</span>
-                    </div>
-                    <div class="relative z-10">
-                        <h3 class="text-3xl font-black text-white tracking-tighter leading-none mb-1">{{ $stats['absen_bulan_ini'] }}</h3>
-                        <p class="text-blue-100/70 text-[10px] font-bold uppercase tracking-widest">Presensi</p>
                     </div>
                 </div>
             </div>
 
             <!-- Scan Action Hero -->
-            <div class="bg-gray-900 rounded-[2.5rem] p-8 mb-10 shadow-2xl shadow-gray-200 relative overflow-hidden flex flex-col items-center text-center group">
-                <div class="w-20 h-20 bg-white/5 rounded-3xl flex items-center justify-center mb-6 backdrop-blur-xl ring-1 ring-white/10 group-hover:scale-110 transition-transform">
-                    <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 17h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+            <div class="relative group rounded-[40px] overflow-hidden p-1 bg-gradient-to-br from-indigo-500/20 to-emerald-500/20 border border-white/5">
+                <div class="glass-card p-10 flex flex-col items-center text-center rounded-[38px] border-none shadow-none">
+                    <div class="w-24 h-24 bg-indigo-500/10 rounded-[32px] flex items-center justify-center mb-8 border border-indigo-500/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                        <svg class="w-12 h-12 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 17h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black text-white tracking-tight mb-3">Absensi Masuk</h3>
+                    <p class="text-slate-400 text-sm font-medium mb-10 max-w-[280px] leading-relaxed opacity-70">Arahkan kamera ke QR Code yang ditampilkan oleh gurumu untuk mencatat kehadiran.</p>
+                    <a href="{{ route('student.scan') }}" class="btn-premium w-full max-w-xs py-5 text-sm uppercase tracking-[0.2em] shadow-indigo-500/30">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+                        Buka Scanner
+                    </a>
                 </div>
-                <h3 class="text-xl font-black text-white tracking-tight mb-2">Masuk Kelas Sekarang</h3>
-                <p class="text-gray-500 text-xs font-medium mb-8 max-w-[240px] leading-relaxed">Scan QR Code yang ditampilkan oleh guru untuk mencatat kehadiranmu.</p>
-                <a href="{{ route('student.scan') }}" class="w-full py-5 bg-blue-600 hover:bg-white hover:text-blue-900 active:scale-95 text-white font-black rounded-2xl shadow-lg shadow-blue-500/30 transition-all duration-300 uppercase tracking-widest text-xs flex items-center justify-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
-                    Buka Kamera
-                </a>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-[32px] group">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/10">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Lifetime</span>
+                    </div>
+                    <h3 class="text-3xl font-black text-white tracking-tight">{{ $stats['total_absen'] }}</h3>
+                    <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">Total Hadir</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-[32px] group border-emerald-500/10">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/10">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Monthly</span>
+                    </div>
+                    <h3 class="text-3xl font-black text-white tracking-tight text-emerald-400">{{ $stats['absen_bulan_ini'] }}</h3>
+                    <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">Bulan Ini</p>
+                </div>
             </div>
 
             <!-- Recent Activity -->
-            <div class="mb-6 flex items-center justify-between px-2">
-                <h3 class="text-lg font-black text-gray-800 tracking-tight">Riwayat Terbaru</h3>
-                <a href="{{ route('student.history') }}" class="text-[10px] font-black text-blue-600 uppercase tracking-widest">Semua</a>
-            </div>
-
-            @if($recentAttendance->isEmpty())
-                <div class="flex flex-col items-center justify-center py-12 bg-white rounded-3xl border border-gray-100 text-center px-6">
-                    <p class="text-gray-400 font-bold text-xs uppercase tracking-widest">Belum ada riwayat absen</p>
+            <div class="space-y-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-black text-white tracking-tight">Riwayat Absensi</h3>
+                    <a href="{{ route('student.history') }}" class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] px-3 py-1 bg-indigo-400/10 rounded-full border border-indigo-500/10">
+                        See All
+                    </a>
                 </div>
-            @else
-                <div class="space-y-4">
-                    @foreach($recentAttendance as $abs)
-                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-50 flex items-center justify-between group hover:border-blue-100 transition-all">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 font-black text-sm uppercase group-hover:bg-blue-600 group-hover:text-white transition-all">
-                                    {{ substr($abs->sesi->jadwal->mapel->nama_mapel, 0, 1) }}
+
+                @if($recentAttendance->isEmpty())
+                    <div class="glass-card p-12 rounded-[40px] text-center border-dashed border-white/5 opacity-50">
+                        <p class="text-slate-500 font-bold text-xs uppercase tracking-widest">Belum ada riwayat aktivitas</p>
+                    </div>
+                @else
+                    <div class="space-y-4">
+                        @foreach($recentAttendance as $abs)
+                            <div class="glass-card p-5 rounded-[28px] flex items-center justify-between group hover:bg-slate-800/60 transition-all border-white/5">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-2xl bg-slate-700/50 flex items-center justify-center text-white font-black text-sm uppercase border border-white/5">
+                                        {{ substr($abs->sesi->jadwal->mapel->nama_mapel, 0, 1) }}
+                                    </div>
+                                    <div>
+                                        <h4 class="font-black text-white tracking-tight text-sm uppercase group-hover:text-indigo-400 transition-colors">{{ $abs->sesi->jadwal->mapel->nama_mapel }}</h4>
+                                        <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">
+                                            {{ \Carbon\Carbon::parse($abs->waktu_scan)->format('d M &bull; H:i') }}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="font-black text-gray-800 tracking-tight text-sm uppercase">{{ $abs->sesi->jadwal->mapel->nama_mapel }}</h4>
-                                    <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1">
-                                        {{ \Carbon\Carbon::parse($abs->waktu_scan)->format('M d, H:i') }}
-                                    </p>
+                                <div class="flex flex-col items-end gap-1">
+                                    <span class="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-xl text-[9px] font-black uppercase tracking-widest border border-emerald-500/20">
+                                        {{ $abs->status }}
+                                    </span>
                                 </div>
                             </div>
-                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[9px] font-black uppercase tracking-widest border border-emerald-100">
-                                {{ $abs->status }}
-                            </span>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
 
     @push('scripts')
     <script>
