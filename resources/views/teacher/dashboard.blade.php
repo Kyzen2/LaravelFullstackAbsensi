@@ -66,6 +66,39 @@
                     <h3 class="text-5xl font-black text-white tracking-tight">{{ $todayStats['total_absen'] }} <span class="text-lg text-slate-500 font-medium">Siswa</span></h3>
                 </div>
 
+                @if($currentSchedule)
+                <!-- Current Session Alert -->
+                <div class="md:col-span-2 glass-card p-6 rounded-[32px] border-emerald-500/30 bg-emerald-500/5 relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6 animate-pulse">
+                    <div class="flex items-center gap-4 relative z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+                            <span class="relative flex h-3 w-3">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                            </span>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-black text-sm uppercase tracking-widest leading-none mb-1">KBM Sedang Berlangsung</h4>
+                            <p class="text-emerald-400/80 text-[10px] font-bold uppercase tracking-[0.2em]">{{ $currentSchedule->mapel->nama_mapel }} &bull; {{ $currentSchedule->kelas->nama_kelas }}</p>
+                        </div>
+                    </div>
+                    
+                    @php 
+                        $currentSesi = \App\Models\SesiPresensi::where('jadwal_id', $currentSchedule->id)->where('tanggal', now()->format('Y-m-d'))->first();
+                    @endphp
+
+                    <div class="flex gap-2 w-full sm:w-auto relative z-10">
+                        @if($currentSesi)
+                        <a href="{{ route('teacher.session.detail', $currentSesi) }}" class="flex-1 sm:flex-none px-6 py-3 rounded-2xl bg-emerald-500 text-white font-black text-[10px] uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20">
+                            Manage Attendance
+                        </a>
+                        @endif
+                        <a href="{{ route('teacher.qr.current') }}" class="flex-1 sm:flex-none px-6 py-3 rounded-2xl bg-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/20 transition-all border border-white/10">
+                            Open QR
+                        </a>
+                    </div>
+                </div>
+                @endif
+
                 <!-- Next Schedule Card -->
                 <div class="glass-card p-8 rounded-[32px] group hover:border-emerald-500/30 transition-all duration-500 relative overflow-hidden">
                     @if($nextSchedule)
