@@ -6,6 +6,7 @@ use App\Models\Jadwal;
 use App\Models\SesiPresensi;
 use App\Models\Absensi;
 use App\Models\Siswa;
+use App\Models\Kelas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -126,6 +127,56 @@ class TeacherDashboardController extends Controller
             ->get();
 
         return view('teacher.schedule', compact('schedules', 'hariIni'));
+    }
+
+    public function attendanceIndex(Request $request)
+    {
+        $search = $request->input('search');
+        
+        // In this learning project, we prioritize the imported class
+        $classes = Kelas::with(['tahunAjaran', 'waliKelas'])
+            ->when($search, function($query) use ($search) {
+                $query->where('nama_kelas', 'like', "%{$search}%");
+            })
+            ->orderByRaw("CASE WHEN nama_kelas = 'XII PPLG-RPL 2' THEN 0 ELSE 1 END")
+            ->orderBy('nama_kelas')
+            ->get();
+
+        return view('teacher.attendance.index', compact('classes', 'search'));
+    }
+
+    public function classAttendanceDetail(Kelas $kelas)
+    {
+        // Fetch students in this class
+        $students = Siswa::whereIn('id', function($query) use ($kelas) {
+            $query->select('siswa_id')
+                ->from('anggota_kelas')
+                ->where('kelas_id', $kelas->id);
+        })->get();
+
+        // For this view, we might want to show sessions or just the student list
+        // Since the user wants "manual input", we'll provide a way to pick/create a session for today
+        $todaySesi = SesiPresensi::whereHas('jadwal', function($q) use ($kelas) {
+                $q->where('kelas_id', $kelas->id);
+            })
+            ->where('tanggal', now()->format('Y-m-d'))
+            ->first();
+
+        // If no session exists for today for this class, we might need a dummy jadwal or an existing one
+        // To keep it simple, we redirect to the latest session if found, or show a list of sessions
+        if ($todaySesi) {
+            return redirect()->route('teacher.session.detail', $todaySesi);
+        }
+
+        // List all sessions for this class to pick from
+        $sessions = SesiPresensi::whereHas('jadwal', function($q) use ($kelas) {
+                $q->where('kelas_id', $kelas->id);
+            })
+            ->with('jadwal.mapel')
+            ->orderBy('tanggal', 'desc')
+            ->get();
+
+        return view('teacher.attendance.class-sessions', compact('kelas', 'students', 'sessions'));
     }
 
     public function sessionDetail(SesiPresensi $sesi)

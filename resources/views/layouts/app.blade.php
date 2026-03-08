@@ -32,6 +32,13 @@
                     {{ $header }}
                 </h1>
                 
+                {{-- Navigation Desktop --}}
+                <div class="hidden sm:flex items-center gap-6 mr-8 ml-auto">
+                    <a href="{{ route('teacher.dashboard') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('teacher.dashboard') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Dashboard</a>
+                    <a href="{{ route('teacher.schedule') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('teacher.schedule') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Jadwal</a>
+                    <a href="{{ route('teacher.attendance.index') }}" class="text-xs font-black uppercase tracking-widest {{ request()->is('teacher/attendance*') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Rekap</a>
+                </div>
+
                 {{-- Logout Button Desktop/Header (Desktop Only) --}}
                 <div class="hidden sm:block">
                     <form method="POST" action="{{ route('logout') }}">
