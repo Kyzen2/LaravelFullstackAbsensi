@@ -6,9 +6,9 @@
                 <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-5.19 4.59-9.364 9.545-9.364 1.257 0 2.459.261 3.553.719m-3.9 10.43a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             </div>
             <h1 class="text-4xl font-black text-white tracking-tight leading-none italic">
-                Edu<span class="text-indigo-400">Attend</span>
+                Edu<span class="text-indigo-400">Log</span>
             </h1>
-            <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] pt-1">Premium Portal Experience</p>
+            <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] pt-1">Portal Absensi Premium</p>
         </div>
 
         <!-- Login Card -->
@@ -61,12 +61,12 @@
 
                     <div class="pt-4 space-y-6">
                         <button type="submit" class="btn-premium w-full py-5 text-sm uppercase tracking-[0.2em]">
-                            Sign In
+                            Masuk
                         </button>
                         
                         <p class="text-center text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">
-                            Don't have an account? 
-                            <a href="{{ route('register') }}" class="text-indigo-400 hover:text-indigo-300 transition-colors ml-1">Join the future</a>
+                            Belum punya akun? 
+                            <a href="{{ route('register') }}" class="text-indigo-400 hover:text-indigo-300 transition-colors ml-1">Gabung sekarang</a>
                         </p>
                     </div>
                 </form>
@@ -79,7 +79,7 @@
                 &bull; &bull; &bull;
             </p>
             <p class="text-slate-400 text-[9px] font-black uppercase tracking-[0.2em]">
-                Trouble logging in? <a href="#" class="text-indigo-400/80 hover:text-indigo-400 transition-colors border-b border-indigo-500/20 pb-0.5">Reach Out Support</a>
+                Bermasalah saat masuk? <a href="#" class="text-indigo-400/80 hover:text-indigo-400 transition-colors border-b border-indigo-500/20 pb-0.5">Hubungi Bantuan</a>
             </p>
         </div>
     </div>

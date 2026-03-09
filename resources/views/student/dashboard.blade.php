@@ -5,7 +5,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg>
             </div>
             <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
-                Student Hub
+                Pusat Siswa
             </h2>
         </div>
     </x-slot>
@@ -59,7 +59,7 @@
                         <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/10">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
-                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Lifetime</span>
+                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Keseluruhan</span>
                     </div>
                     <h3 class="text-3xl font-black text-white tracking-tight">{{ $stats['total_absen'] }}</h3>
                     <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">Total Hadir</p>
@@ -70,7 +70,7 @@
                         <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/10">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </div>
-                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Monthly</span>
+                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Bulanan</span>
                     </div>
                     <h3 class="text-3xl font-black text-white tracking-tight text-emerald-400">{{ $stats['absen_bulan_ini'] }}</h3>
                     <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">Bulan Ini</p>
@@ -82,7 +82,7 @@
                 <div class="flex items-center justify-between">
                     <h3 class="text-xl font-black text-white tracking-tight">Riwayat Absensi</h3>
                     <a href="{{ route('student.history') }}" class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] px-3 py-1 bg-indigo-400/10 rounded-full border border-indigo-500/10">
-                        See All
+                        Lihat Semua
                     </a>
                 </div>
 

@@ -5,7 +5,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
             </div>
             <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
-                Teacher Central
+                Pusat Guru
             </h2>
         </div>
     </x-slot>
@@ -60,7 +60,7 @@
                         <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/10 group-hover:scale-110 transition-transform">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
                         </div>
-                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-indigo-400 transition-colors">Daily Attendance</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-indigo-400 transition-colors">Kehadiran Harian</span>
                     </div>
                     <p class="text-slate-400 text-sm font-bold uppercase tracking-wider mb-1">Presensi Hari Ini</p>
                     <h3 class="text-5xl font-black text-white tracking-tight">{{ $todayStats['total_absen'] }} <span class="text-lg text-slate-500 font-medium">Siswa</span></h3>
@@ -89,11 +89,11 @@
                     <div class="flex gap-2 w-full sm:w-auto relative z-10">
                         @if($currentSesi)
                         <a href="{{ route('teacher.session.detail', $currentSesi) }}" class="flex-1 sm:flex-none px-6 py-3 rounded-2xl bg-emerald-500 text-white font-black text-[10px] uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20">
-                            Manage Attendance
+                            Kelola Kehadiran
                         </a>
                         @endif
                         <a href="{{ route('teacher.qr.current') }}" class="flex-1 sm:flex-none px-6 py-3 rounded-2xl bg-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/20 transition-all border border-white/10">
-                            Open QR
+                            Buka QR
                         </a>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                 <div class="glass-card p-8 rounded-[32px] group hover:border-emerald-500/30 transition-all duration-500 relative overflow-hidden">
                     @if($nextSchedule)
                     <div class="absolute top-0 right-0 p-4">
-                        <span class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[9px] font-black text-emerald-400 uppercase tracking-widest animate-pulse">Next Up</span>
+                        <span class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[9px] font-black text-emerald-400 uppercase tracking-widest animate-pulse">Selanjutnya</span>
                     </div>
                     
                     <div class="flex items-center justify-between mb-6">
@@ -131,7 +131,7 @@
             <!-- All Schedules (Desktop Only) -->
             <div class="hidden sm:block space-y-6">
                 <div class="flex items-center gap-4">
-                    <h3 class="text-2xl font-black text-white tracking-tight">Full Schedule</h3>
+                    <h3 class="text-2xl font-black text-white tracking-tight">Semua Jadwal</h3>
                     <div class="flex-1 h-px bg-white/5"></div>
                 </div>
 

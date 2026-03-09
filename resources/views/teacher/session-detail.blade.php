@@ -4,7 +4,7 @@
             <a href="{{ route('teacher.schedule') }}" class="w-8 h-8 rounded-lg bg-slate-500/10 flex items-center justify-center text-slate-400 border border-white/5 hover:bg-slate-500/20 transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
             </a>
-            <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">Manage Attendance</h2>
+            <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">Kelola Kehadiran</h2>
         </div>
     </x-slot>
 
@@ -16,7 +16,7 @@
         <div class="max-w-md mx-auto px-6 relative z-10">
             <!-- Header Section -->
             <div class="mb-10 text-center">
-                <h1 class="text-3xl font-black text-white tracking-tighter uppercase leading-tight mb-2">Manual Input</h1>
+                <h1 class="text-3xl font-black text-white tracking-tighter uppercase leading-tight mb-2">Input Manual</h1>
                 <div class="flex flex-col items-center gap-1">
                     <span class="text-indigo-400 text-sm font-bold">{{ $jadwal->mapel->nama_mapel }}</span>
                     <span class="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">{{ $jadwal->kelas->nama_kelas }} &bull; {{ \Carbon\Carbon::parse($sesi->tanggal)->format('d M Y') }}</span>

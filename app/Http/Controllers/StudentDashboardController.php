@@ -12,6 +12,10 @@ class StudentDashboardController extends Controller
     public function index()
     {
         $siswa = Auth::user()->siswa;
+        
+        if (!$siswa) {
+            return redirect()->route('dashboard')->with('error', 'Profil Siswa tidak ditemukan.');
+        }
 
         // Get recent attendance
         $recentAttendance = Absensi::with(['sesi.jadwal.mapel'])
@@ -40,6 +44,10 @@ class StudentDashboardController extends Controller
     public function history()
     {
         $siswa = Auth::user()->siswa;
+        
+        if (!$siswa) {
+            return redirect()->route('dashboard')->with('error', 'Profil Siswa tidak ditemukan.');
+        }
         
         $attendanceHistory = Absensi::with(['sesi.jadwal.mapel'])
             ->where('siswa_id', $siswa->id)

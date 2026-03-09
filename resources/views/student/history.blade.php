@@ -5,7 +5,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
             </div>
             <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
-                Activity Log
+                Log Aktivitas
             </h2>
         </div>
     </x-slot>
@@ -22,7 +22,7 @@
                 <div class="flex items-center gap-4">
                     <div class="glass-card px-6 py-3 rounded-2xl border-white/5 flex items-center gap-3">
                         <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                        <span class="text-[10px] font-black text-white uppercase tracking-widest">Database Sync Active</span>
+                        <span class="text-[10px] font-black text-white uppercase tracking-widest">Sinkronisasi Database Aktif</span>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,7 @@
             <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center group-hover:bg-indigo-500/20 group-hover:text-indigo-400 transition-all">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             </div>
-            <span class="text-[11px] font-black uppercase tracking-[0.2em]">Back to Dashboard</span>
+            <span class="text-[11px] font-black uppercase tracking-[0.2em]">Kembali ke Dashboard</span>
         </a>
     </div>
 </x-app-layout>

@@ -17,6 +17,11 @@ class TeacherDashboardController extends Controller
     public function index()
     {
         $guru = Auth::user()->guru;
+        
+        if (!$guru) {
+            return redirect()->route('dashboard')->with('error', 'Profil Guru tidak ditemukan.');
+        }
+
         $hariIni = $this->getHariIndonesia(now()->format('l'));
         $sekarang = now()->format('H:i:s');
         
@@ -53,6 +58,10 @@ class TeacherDashboardController extends Controller
     public function currentQr()
     {
         $guru = Auth::user()->guru;
+        if (!$guru) {
+            return redirect()->route('dashboard')->with('error', 'Profil Guru tidak ditemukan.');
+        }
+
         $hariIni = $this->getHariIndonesia(now()->format('l'));
         $sekarang = now()->format('H:i:s');
 
@@ -84,7 +93,8 @@ class TeacherDashboardController extends Controller
     public function refreshToken(SesiPresensi $sesi)
     {
         // Only owner can refresh
-        if ($sesi->jadwal->guru_id !== Auth::user()->guru->id) {
+        $guru = Auth::user()->guru;
+        if (!$guru || $sesi->jadwal->guru_id !== $guru->id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -118,6 +128,10 @@ class TeacherDashboardController extends Controller
     public function schedule()
     {
         $guru = Auth::user()->guru;
+        if (!$guru) {
+            return redirect()->route('dashboard')->with('error', 'Profil Guru tidak ditemukan.');
+        }
+
         $hariIni = $this->getHariIndonesia(now()->format('l'));
 
         $schedules = Jadwal::with(['kelas', 'mapel', 'lokasi'])
@@ -182,7 +196,9 @@ class TeacherDashboardController extends Controller
     public function sessionDetail(SesiPresensi $sesi)
     {
         $jadwal = $sesi->jadwal;
-        if ($jadwal->guru_id !== Auth::user()->guru->id) {
+        $guru = Auth::user()->guru;
+
+        if (!$guru || $jadwal->guru_id !== $guru->id) {
             abort(403);
         }
 
@@ -208,7 +224,8 @@ class TeacherDashboardController extends Controller
         ]);
 
         $sesi = SesiPresensi::findOrFail($request->sesi_id);
-        if ($sesi->jadwal->guru_id !== Auth::user()->guru->id) {
+        $guru = Auth::user()->guru;
+        if (!$guru || $sesi->jadwal->guru_id !== $guru->id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 

@@ -5,7 +5,7 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
             </div>
             <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
-                Attendance Scan
+                Scan Kehadiran
             </h2>
         </div>
     </x-slot>
@@ -19,8 +19,8 @@
             <!-- Header Section -->
             <div class="flex items-center justify-between">
                 <div class="space-y-1">
-                    <h2 class="text-3xl font-black text-white tracking-tighter uppercase leading-none">QR Scanner</h2>
-                    <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] italic">Mark Presence Instantly</p>
+                    <h2 class="text-3xl font-black text-white tracking-tighter uppercase leading-none">Scan QR</h2>
+                    <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] italic">Catat Kehadiran Instan</p>
                 </div>
                 
                 <div class="flex gap-3">
@@ -56,7 +56,7 @@
 
                         <!-- Status Label -->
                         <div id="status-label" class="absolute bottom-10 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full glass-card border-white/10 text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 shadow-xl">
-                            Scanner Active
+                            Scanner Aktif
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 <div>
-                    <h4 class="text-white font-black text-xs uppercase tracking-widest mb-0.5">Focus Required</h4>
+                    <h4 class="text-white font-black text-xs uppercase tracking-widest mb-0.5">Butuh Fokus</h4>
                     <p class="text-slate-500 text-[10px] font-bold uppercase tracking-wider opacity-60">Pastikan Kode QR berada dalam kotak fokus.</p>
                 </div>
             </div>
@@ -81,8 +81,8 @@
             <div id="status-icon" class="w-20 h-20 bg-indigo-500/10 rounded-[2rem] flex items-center justify-center mx-auto mb-8 border border-indigo-500/20 transition-all duration-500">
                 <svg class="w-10 h-10 text-indigo-400 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
             </div>
-            <h3 id="result-title" class="text-2xl font-black text-white tracking-tight uppercase mb-2">Processing</h3>
-            <p id="result-subtitle" class="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">Verifying Presence Data</p>
+            <h3 id="result-title" class="text-2xl font-black text-white tracking-tight uppercase mb-2">Memproses</h3>
+            <p id="result-subtitle" class="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">Memverifikasi Data Kehadiran</p>
         </div>
     </div>
 
@@ -135,7 +135,7 @@
             playBeep();
             if(html5QrCode) {
                 html5QrCode.stop().then(() => {
-                    showOverlay("Success", "Presence Captured!", "emerald");
+                    showOverlay("Berhasil", "Kehadiran Tercatat!", "emerald");
                     
                     fetch("{{ route('attendance.process') }}", {
                         method: 'POST',
@@ -156,14 +156,14 @@
                                 window.location.href = "{{ route('student.dashboard') }}";
                             }, 1000);
                         } else {
-                            showOverlay("Failed", data.message, "rose");
+                            showOverlay("Gagal", data.message, "rose");
                             setTimeout(() => {
                                 location.reload();
                             }, 2000);
                         }
                     })
                     .catch(error => {
-                        showOverlay("Error", "System error occurred.", "rose");
+                        showOverlay("Error", "Terjadi kesalahan sistem.", "rose");
                         setTimeout(() => location.reload(), 2000);
                     });
                 });

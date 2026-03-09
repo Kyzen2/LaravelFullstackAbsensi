@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/student/history', [StudentDashboardController::class, 'history'])->name('student.history');
     
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/master', [AdminDashboardController::class, 'masterData'])->name('admin.master.data');
     
     Route::post('/attendance/process', [AttendanceController::class, 'process'])->name('attendance.process');
 });

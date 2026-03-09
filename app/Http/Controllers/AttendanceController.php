@@ -19,6 +19,13 @@ class AttendanceController extends Controller
 
         $siswa = Auth::user()->siswa;
         
+        if (!$siswa) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Hanya akun Siswa yang bisa melakukan absensi.'
+            ]);
+        }
+        
         // Find the session
         $sesi = SesiPresensi::where('token_qr', $request->token_qr)
             ->where('tanggal', now()->format('Y-m-d'))

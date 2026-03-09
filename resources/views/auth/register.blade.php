@@ -3,9 +3,9 @@
         <!-- Brand Header -->
         <div class="text-center space-y-2">
             <h1 class="text-4xl font-black text-white tracking-tight leading-none italic">
-                Edu<span class="text-indigo-400">Attend</span>
+                Edu<span class="text-indigo-400">Log</span>
             </h1>
-            <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] pt-1">New Member Onboarding</p>
+            <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] pt-1">Pendaftaran Anggota Baru</p>
         </div>
 
         <!-- Register Card -->
@@ -63,7 +63,7 @@
 
                     <!-- Confirm Password -->
                     <div class="space-y-2">
-                        <label for="password_confirmation" class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Confirm Password</label>
+                        <label for="password_confirmation" class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Konfirmasi Password</label>
                         <div class="relative group">
                             <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-500 group-focus-within:text-indigo-400 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
@@ -76,12 +76,12 @@
 
                     <div class="pt-6 space-y-6">
                         <button type="submit" class="btn-premium w-full py-5 text-sm uppercase tracking-[0.2em] shadow-emerald-500/10">
-                            Create Account
+                            Buat Akun
                         </button>
                         
                         <p class="text-center text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">
-                            Already registered? 
-                            <a href="{{ route('login') }}" class="text-indigo-400 hover:text-indigo-300 transition-colors ml-1">Sign In instead</a>
+                            Sudah punya akun? 
+                            <a href="{{ route('login') }}" class="text-indigo-400 hover:text-indigo-300 transition-colors ml-1">Masuk saja</a>
                         </p>
                     </div>
                 </form>

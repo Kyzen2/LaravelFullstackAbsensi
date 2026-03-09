@@ -5,7 +5,7 @@
                 ADM
             </div>
             <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
-                System Overdrive
+                Pusat Sistem
             </h2>
         </div>
     </x-slot>
@@ -56,7 +56,7 @@
                         </span>
                     </div>
                     <div>
-                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Live Presence</p>
+                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Kehadiran Langsung</p>
                         <p class="text-3xl font-black text-white tracking-tighter">{{ $stats['absensi_today'] }}</p>
                     </div>
                 </div>
@@ -66,17 +66,17 @@
                 <!-- Recent Activity Table -->
                 <div class="lg:col-span-2 glass-card rounded-[40px] border-white/5 overflow-hidden shadow-2xl">
                     <div class="p-8 border-b border-white/5 flex justify-between items-center">
-                        <h3 class="text-xl font-black text-white tracking-tight">Recent Activity</h3>
-                        <a href="#" class="text-[10px] font-black text-indigo-400 hover:text-white uppercase tracking-[0.2em] transition-colors">Audit All &rarr;</a>
+                        <h3 class="text-xl font-black text-white tracking-tight">Aktivitas Terbaru</h3>
+                        <a href="#" class="text-[10px] font-black text-indigo-400 hover:text-white uppercase tracking-[0.2em] transition-colors">Lihat Semua &rarr;</a>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full">
                             <thead>
                                 <tr class="bg-white/5">
-                                    <th class="px-8 py-5 text-left text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Identity</th>
-                                    <th class="px-8 py-5 text-left text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Subject</th>
+                                    <th class="px-8 py-5 text-left text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Identitas</th>
+                                    <th class="px-8 py-5 text-left text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Mata Pelajaran</th>
                                     <th class="px-8 py-5 text-center text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Status</th>
-                                    <th class="px-8 py-5 text-right text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Timestamp</th>
+                                    <th class="px-8 py-5 text-right text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Waktu</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-white/5">
@@ -105,7 +105,7 @@
                                         <td colspan="4" class="px-8 py-20 text-center">
                                             <div class="opacity-20 flex flex-col items-center">
                                                 <svg class="w-12 h-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                <p class="text-[10px] font-black uppercase tracking-[0.3em]">No Activity Logged</p>
+                                                <p class="text-[10px] font-black uppercase tracking-[0.3em]">Belum Ada Aktivitas</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -120,18 +120,18 @@
                     <div class="glass-card rounded-[40px] border-white/5 p-8 bg-indigo-500/5 relative overflow-hidden group">
                         <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-indigo-500/10 blur-3xl rounded-full group-hover:bg-indigo-500/20 transition-all duration-1000"></div>
                         <div class="relative z-10 space-y-6">
-                            <h3 class="text-2xl font-black text-white tracking-tighter">Master Hub</h3>
-                            <p class="text-slate-500 text-xs font-medium leading-relaxed opacity-80">Centralized control for Teachers, Students, and Curriculum Data.</p>
-                            <a href="#" class="btn-premium w-full py-5 text-sm uppercase tracking-[0.2em] shadow-indigo-500/20">
-                                Launch Center
+                            <h3 class="text-2xl font-black text-white tracking-tighter">Pusat Data</h3>
+                            <p class="text-slate-500 text-xs font-medium leading-relaxed opacity-80">Kontrol terpusat untuk data Guru, Siswa, dan Kurikulum.</p>
+                            <a href="{{ route('admin.master.data') }}" class="btn-premium w-full py-5 text-sm uppercase tracking-[0.2em] shadow-indigo-500/20">
+                                Buka Pusat Data
                             </a>
                         </div>
                     </div>
 
                     <div class="glass-card rounded-[40px] border-white/5 p-8 space-y-6 shadow-xl">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-xs font-black text-slate-500 uppercase tracking-[0.3em]">System Engine</h3>
-                            <span class="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-[8px] font-black uppercase tracking-widest border border-emerald-500/20">Operational</span>
+                            <h3 class="text-xs font-black text-slate-500 uppercase tracking-[0.3em]">Mesin Sistem</h3>
+                            <span class="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-[8px] font-black uppercase tracking-widest border border-emerald-500/20">Operasional</span>
                         </div>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/5">
@@ -139,8 +139,8 @@
                                 <div class="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]"></div>
                             </div>
                             <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/5">
-                                <span class="text-[10px] font-black text-white/40 uppercase tracking-widest">Active Auth</span>
-                                <span class="text-[11px] font-black text-white tracking-widest">{{ auth()->user()->count() }} Nodes</span>
+                                <span class="text-[10px] font-black text-white/40 uppercase tracking-widest">Sesi Aktif</span>
+                                <span class="text-[11px] font-black text-white tracking-widest">{{ auth()->user()->count() }} User</span>
                             </div>
                         </div>
                     </div>

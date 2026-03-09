@@ -32,11 +32,16 @@
                     {{ $header }}
                 </h1>
                 
-                {{-- Navigation Desktop --}}
                 <div class="hidden sm:flex items-center gap-6 mr-8 ml-auto">
-                    <a href="{{ route('teacher.dashboard') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('teacher.dashboard') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Dashboard</a>
+                    <a href="{{ route('dashboard') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('dashboard*') || request()->routeIs('teacher.dashboard') || request()->routeIs('student.dashboard') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Beranda</a>
+                    @if(auth()->user()->isGuru())
                     <a href="{{ route('teacher.schedule') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('teacher.schedule') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Jadwal</a>
                     <a href="{{ route('teacher.attendance.index') }}" class="text-xs font-black uppercase tracking-widest {{ request()->is('teacher/attendance*') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Rekap</a>
+                    @endif
+                    @if(auth()->user()->isSiswa())
+                    <a href="{{ route('student.scan') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('student.scan') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Scan</a>
+                    <a href="{{ route('student.history') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('student.history') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Riwayat</a>
+                    @endif
                 </div>
 
                 {{-- Logout Button Desktop/Header (Desktop Only) --}}
@@ -61,7 +66,7 @@
         {{-- Footer (Desktop Only) --}}
         <footer class="hidden sm:block py-10 border-t border-white/5 opacity-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs font-medium tracking-widest uppercase">
-                &copy; {{ date('Y') }} &bull; Absensi Siswa &bull; Premium Experience
+                &copy; {{ date('Y') }} &bull; EduLog &bull; Premium Experience
             </div>
         </footer>
 
