@@ -30,7 +30,7 @@
                             <h3 class="text-2xl font-black text-white tracking-tight mb-2">Guru & Staf</h3>
                             <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-relaxed">Pengelolaan tenaga pendidik dan kredensial akses.</p>
                         </div>
-                        <a href="#" class="flex items-center gap-2 text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
+                        <a href="{{ route('admin.teachers.index') }}" class="flex items-center gap-2 text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
                             Konfigurasi Guru <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                         </a>
                     </div>
@@ -47,7 +47,7 @@
                             <h3 class="text-2xl font-black text-white tracking-tight mb-2">Direktori Siswa</h3>
                             <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-relaxed">Database semua siswa aktif dan pembagian jadwal kelas.</p>
                         </div>
-                        <a href="#" class="flex items-center gap-2 text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
+                        <a href="{{ route('admin.students.index') }}" class="flex items-center gap-2 text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
                             Buka Database <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                         </a>
                     </div>

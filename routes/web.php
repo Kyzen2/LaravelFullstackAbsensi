@@ -29,6 +29,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/master', [AdminDashboardController::class, 'masterData'])->name('admin.master.data');
     
+    // Admin Directories
+    Route::get('/admin/students', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('admin.students.index');
+    Route::get('/admin/teachers', [App\Http\Controllers\Admin\TeacherController::class, 'index'])->name('admin.teachers.index');
+    
     Route::post('/attendance/process', [AttendanceController::class, 'process'])->name('attendance.process');
 });
 
