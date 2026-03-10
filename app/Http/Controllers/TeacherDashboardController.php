@@ -170,8 +170,10 @@ class TeacherDashboardController extends Controller
 
         // For this view, we might want to show sessions or just the student list
         // Since the user wants "manual input", we'll provide a way to pick/create a session for today
-        $todaySesi = SesiPresensi::whereHas('jadwal', function($q) use ($kelas) {
-                $q->where('kelas_id', $kelas->id);
+        $guru = Auth::user()->guru;
+        $todaySesi = SesiPresensi::whereHas('jadwal', function($q) use ($kelas, $guru) {
+                $q->where('kelas_id', $kelas->id)
+                  ->where('guru_id', $guru->id);
             })
             ->where('tanggal', now()->format('Y-m-d'))
             ->first();
@@ -183,8 +185,9 @@ class TeacherDashboardController extends Controller
         }
 
         // List all sessions for this class to pick from
-        $sessions = SesiPresensi::whereHas('jadwal', function($q) use ($kelas) {
-                $q->where('kelas_id', $kelas->id);
+        $sessions = SesiPresensi::whereHas('jadwal', function($q) use ($kelas, $guru) {
+                $q->where('kelas_id', $kelas->id)
+                  ->where('guru_id', $guru->id);
             })
             ->with('jadwal.mapel')
             ->orderBy('tanggal', 'desc')

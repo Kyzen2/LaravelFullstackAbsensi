@@ -88,10 +88,23 @@ class ImportStudents extends Command
             }
 
             // Get or create Kelas
-            $kelas = Kelas::firstOrCreate(
-                ['nama_kelas' => $targetClass],
-                ['tahun_ajaran_id' => $ta->id]
-            );
+            $guru = DB::table('guru')->first();
+            if (!$guru) {
+                $this->error("No Guru found. Please seed the database first.");
+                return 1;
+            }
+
+            $kelasId = DB::table('kelas')->where('nama_kelas', $targetClass)->value('id');
+            if (!$kelasId) {
+                $kelasId = DB::table('kelas')->insertGetId([
+                    'nama_kelas' => $targetClass,
+                    'tahun_ajaran_id' => $ta->id,
+                    'wali_kelas_id' => $guru->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            $kelas = (object)['id' => $kelasId];
 
             $bar = $this->output->createProgressBar($count);
             $bar->start();
@@ -99,31 +112,54 @@ class ImportStudents extends Command
             $password = $this->option('password');
 
             foreach ($filtered as $student) {
-                DB::transaction(function () use ($student, $kelas, $password) {
+                DB::transaction(function () use ($student, $kelasId, $password) {
+                    $nisn = trim($student['nisn']);
+                    $nama = trim($student['nama']);
+
                     // 1. Create/Update User
-                    $user = User::updateOrCreate(
-                        ['serial_number' => $student['nisn']],
-                        [
-                            'name' => $student['nama'],
+                    $userId = DB::table('users')->where('serial_number', $nisn)->value('id');
+                    if (!$userId) {
+                        $userId = DB::table('users')->insertGetId([
+                            'serial_number' => $nisn,
+                            'name' => $nama,
                             'password' => Hash::make($password),
                             'role' => 'siswa',
-                        ]
-                    );
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    } else {
+                        DB::table('users')->where('id', $userId)->update([
+                            'name' => $nama,
+                            'updated_at' => now(),
+                        ]);
+                    }
 
                     // 2. Create/Update Siswa
-                    $siswa = Siswa::updateOrCreate(
-                        ['user_id' => $user->id],
-                        [
-                            'nisn' => $student['nisn'],
-                            'nama_siswa' => $student['nama'],
-                        ]
-                    );
+                    $siswaId = DB::table('siswa')->where('user_id', $userId)->value('id');
+                    if (!$siswaId) {
+                        $siswaId = DB::table('siswa')->insertGetId([
+                            'user_id' => $userId,
+                            'nisn' => $nisn,
+                            'nama_siswa' => $nama,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    } else {
+                        DB::table('siswa')->where('id', $siswaId)->update([
+                            'nama_siswa' => $nama,
+                            'updated_at' => now(),
+                        ]);
+                    }
 
                     // 3. Associate with Class
-                    AnggotaKelas::updateOrCreate(
+                    DB::table('anggota_kelas')->updateOrInsert(
                         [
-                            'siswa_id' => $siswa->id,
-                            'kelas_id' => $kelas->id
+                            'siswa_id' => $siswaId,
+                            'kelas_id' => $kelasId
+                        ],
+                        [
+                            'created_at' => now(),
+                            'updated_at' => now(),
                         ]
                     );
                 });

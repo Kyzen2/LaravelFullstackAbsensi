@@ -5,6 +5,7 @@ use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\TeacherDashboardController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AttendanceController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
     return view('welcome');
