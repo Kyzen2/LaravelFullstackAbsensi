@@ -33,10 +33,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/teacher/qr-refresh/{sesi}', [TeacherDashboardController::class, 'refreshToken'])->name('teacher.qr.refresh');
     Route::get('/teacher/qr/{jadwal}', [TeacherDashboardController::class, 'generateQr'])->name('teacher.qr');
 
+    // Rute Penilaian (Assessment) Guru
+    Route::get('/teacher/assessments', [App\Http\Controllers\Teacher\AssessmentController::class, 'index'])->name('teacher.assessments.index');
+    Route::get('/teacher/assessments/evaluate/{studentUser}', [App\Http\Controllers\Teacher\AssessmentController::class, 'create'])->name('teacher.assessments.create');
+    Route::post('/teacher/assessments/store', [App\Http\Controllers\Teacher\AssessmentController::class, 'store'])->name('teacher.assessments.store');
+
     // Rute khusus Siswa
     Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
     Route::get('/student/scan', [StudentDashboardController::class, 'scan'])->name('student.scan');
     Route::get('/student/history', [StudentDashboardController::class, 'history'])->name('student.history');
+    
+    // Rute Penilaian (Assessment) Siswa
+    Route::get('/student/assessments', [App\Http\Controllers\Student\AssessmentController::class, 'index'])->name('student.assessments.index');
     
     // Rute khusus Admin
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
@@ -45,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
     // Admin Directories (Direktori Guru/Siswa)
     Route::resource('/admin/students', App\Http\Controllers\Admin\StudentController::class)->names('admin.students');
     Route::resource('/admin/teachers', App\Http\Controllers\Admin\TeacherController::class)->names('admin.teachers');
+    Route::resource('/admin/assessment-categories', App\Http\Controllers\Admin\AssessmentCategoryController::class)->names('admin.assessment-categories');
     
     // Proses Scan Presensi (API call dari Mobile/Scan View)
     Route::post('/attendance/process', [AttendanceController::class, 'process'])->name('attendance.process');

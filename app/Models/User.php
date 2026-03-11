@@ -72,4 +72,20 @@ class User extends Authenticatable
     {
         return $this->role === 'siswa';
     }
+
+    /**
+     * Penilaian yang diberikan oleh user ini sebagai Penilai (Evaluator).
+     */
+    public function givenAssessments()
+    {
+        return $this->hasMany(Assessment::class, 'evaluator_id');
+    }
+
+    /**
+     * Penilaian yang diterima oleh user ini sebagai yang Dinilai (Evaluatee).
+     */
+    public function receivedAssessments()
+    {
+        return $this->hasMany(Assessment::class, 'evaluatee_id');
+    }
 }

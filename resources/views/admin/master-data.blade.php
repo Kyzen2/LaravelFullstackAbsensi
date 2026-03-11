@@ -120,6 +120,23 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- Assessment Management -->
+                <div class="glass-card p-10 rounded-[48px] border-white/5 group hover:bg-emerald-400/10 transition-all duration-500 relative overflow-hidden">
+                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-emerald-400/10 blur-3xl rounded-full group-hover:bg-emerald-400/20 transition-all duration-700"></div>
+                    <div class="relative z-10 space-y-6">
+                        <div class="w-16 h-16 bg-emerald-400/20 rounded-[20px] flex items-center justify-center text-emerald-300 border border-emerald-400/20">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black text-white tracking-tight mb-2">Kriteria Nilai</h3>
+                            <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-relaxed">Kelola kriteria penilaian untuk semua anggota.</p>
+                        </div>
+                        <a href="{{ route('admin.assessment-categories.index') }}" class="flex items-center gap-2 text-[10px] font-black text-emerald-300 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
+                            Konfigurasi Kriteria <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
