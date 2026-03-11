@@ -41,6 +41,7 @@
                     <a href="{{ route('teacher.schedule') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('teacher.schedule') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Jadwal</a>
                     <a href="{{ route('teacher.attendance.index') }}" class="text-xs font-black uppercase tracking-widest {{ request()->is('teacher/attendance*') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Rekap</a>
                     <a href="{{ route('teacher.assessments.index') }}" class="text-xs font-black uppercase tracking-widest {{ request()->is('teacher/assessments*') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Nilai</a>
+                    <a href="{{ route('teacher.reports.index') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('teacher.reports*') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Cetak</a>
                     @endif
                     @if(auth()->user()->isSiswa())
                     <a href="{{ route('student.scan') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('student.scan') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Scan</a>

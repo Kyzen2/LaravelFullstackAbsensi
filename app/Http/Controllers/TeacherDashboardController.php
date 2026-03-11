@@ -7,6 +7,7 @@ use App\Models\SesiPresensi;
 use App\Models\Absensi;
 use App\Models\Siswa;
 use App\Models\Kelas;
+use App\Models\Mapel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -349,6 +350,99 @@ class TeacherDashboardController extends Controller
             'Saturday' => 'Sabtu'
         ];
         return $days[$day] ?? $day;
+    }
+
+    /**
+     * Halaman Filter Laporan Absensi kustom.
+     */
+    public function reportIndex()
+    {
+        $guru = Auth::user()->guru;
+        
+        // Ambil Daftar Mapel yang diampu oleh guru ini
+        $mapels = Mapel::whereIn('id', function($q) use ($guru) {
+            $q->select('mapel_id')->from('jadwal')->where('guru_id', $guru->id);
+        })->get();
+
+        // Ambil Daftar Kelas yang diajar oleh guru ini
+        $classes = Kelas::whereIn('id', function($q) use ($guru) {
+            $q->select('kelas_id')->from('jadwal')->where('guru_id', $guru->id);
+        })->get();
+
+        return view('teacher.reports.index', compact('mapels', 'classes'));
+    }
+
+    /**
+     * Export PDF dengan filter Mapel, Kelas, dan Range Tanggal.
+     */
+    public function exportFilteredPdf(Request $request)
+    {
+        $request->validate([
+            'mapel_id' => 'required|exists:mapel,id',
+            'kelas_id' => 'required|exists:kelas,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $guru = Auth::user()->guru;
+        $mapel = Mapel::findOrFail($request->mapel_id);
+        $kelas = Kelas::with('tahunAjaran')->findOrFail($request->kelas_id);
+
+        // Cari semua jadwal yang cocok (bisa jadi ada lebih dari satu jadwal dalam seminggu untuk mapel/kelas yang sama)
+        $jadwalIds = Jadwal::where('guru_id', $guru->id)
+            ->where('mapel_id', $request->mapel_id)
+            ->where('kelas_id', $request->kelas_id)
+            ->pluck('id');
+
+        if ($jadwalIds->isEmpty()) {
+            return back()->with('error', 'Jadwal tidak ditemukan untuk kombinasi Mapel dan Kelas ini.');
+        }
+
+        // Ambil semua sesi dalam range tanggal tersebut
+        $sessions = SesiPresensi::whereIn('jadwal_id', $jadwalIds)
+            ->whereBetween('tanggal', [$request->start_date, $request->end_date])
+            ->orderBy('tanggal')
+            ->get();
+
+        if ($sessions->isEmpty()) {
+            return back()->with('error', 'Tidak ada data absensi ditemukan untuk rentang tanggal tersebut.');
+        }
+
+        // Ambil daftar siswa kelas tersebut
+        $students = Siswa::whereIn('id', function($query) use ($kelas) {
+            $query->select('siswa_id')
+                ->from('anggota_kelas')
+                ->where('kelas_id', $kelas->id);
+        })->get();
+
+        $attendanceData = [];
+        foreach ($students as $student) {
+            $records = Absensi::whereIn('sesi_id', $sessions->pluck('id'))
+                ->where('siswa_id', $student->id)
+                ->get();
+            
+            $attendanceData[$student->id] = [
+                'nama' => $student->nama_siswa,
+                'hadir' => $records->where('status', 'hadir')->count(),
+                'sakit' => $records->where('status', 'sakit')->count(),
+                'izin' => $records->where('status', 'izin')->count(),
+                'alpa' => $records->where('status', 'alpa')->count(),
+                'total_pertemuan' => $sessions->count()
+            ];
+        }
+
+        // Pakai data jadwal pertama sebagai info header (karena mapel & kelasnya pasti sama)
+        $jadwalInfo = Jadwal::with(['mapel', 'kelas', 'guru', 'lokasi'])->find($jadwalIds->first());
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('teacher.reports.pdf', compact(
+            'jadwalInfo', 
+            'attendanceData', 
+            'sessions', 
+            'request'
+        ));
+
+        $filename = 'Laporan-' . Str::slug($mapel->nama_mapel) . '-' . Str::slug($kelas->nama_kelas) . '.pdf';
+        return $pdf->download($filename);
     }
 
     private function getHariIndonesia($day)

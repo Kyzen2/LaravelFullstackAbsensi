@@ -28,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/teacher/attendance/class/{kelas}', [TeacherDashboardController::class, 'classAttendanceDetail'])->name('teacher.attendance.class');
     Route::get('/teacher/session/{sesi}', [TeacherDashboardController::class, 'sessionDetail'])->name('teacher.session.detail');
     Route::post('/teacher/attendance/manual', [TeacherDashboardController::class, 'storeManualAttendance'])->name('teacher.attendance.manual');
+    Route::get('/teacher/reports', [TeacherDashboardController::class, 'reportIndex'])->name('teacher.reports.index');
+    Route::get('/teacher/reports/export', [TeacherDashboardController::class, 'exportFilteredPdf'])->name('teacher.reports.export');
     Route::get('/teacher/export-pdf/{jadwal}', [TeacherDashboardController::class, 'exportPdf'])->name('teacher.export.pdf');
     Route::get('/teacher/qr-current', [TeacherDashboardController::class, 'currentQr'])->name('teacher.qr.current');
     Route::post('/teacher/qr-refresh/{sesi}', [TeacherDashboardController::class, 'refreshToken'])->name('teacher.qr.refresh');

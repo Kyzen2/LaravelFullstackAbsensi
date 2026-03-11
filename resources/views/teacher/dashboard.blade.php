@@ -57,10 +57,10 @@
                 <!-- Stat Card 1 -->
                 <div class="glass-card p-8 rounded-[32px] group hover:border-indigo-500/30 transition-all duration-500">
                     <div class="flex items-center justify-between mb-6">
-                        <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/10 group-hover:scale-110 transition-transform">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                        </div>
-                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-indigo-400 transition-colors">Kehadiran Harian</span>
+                        <a href="{{ route('teacher.reports.index') }}" class="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/10 group-hover:scale-110 transition-transform">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 17v-2m3 2v-4m3 2v-6m-8-4h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </a>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-indigo-400 transition-colors">Rekap Laporan</span>
                     </div>
                     <p class="text-slate-400 text-sm font-bold uppercase tracking-wider mb-1">Presensi Hari Ini</p>
                     <h3 class="text-5xl font-black text-white tracking-tight">{{ $todayStats['total_absen'] }} <span class="text-lg text-slate-500 font-medium">Siswa</span></h3>
