@@ -45,7 +45,7 @@
                 <th>Hadir</th>
                 <th>Sakit</th>
                 <th>Izin</th>
-                <th>Alpha</th>
+                <th>Alpa</th>
                 <th>Total</th>
                 <th>Presensi (%)</th>
             </tr>
@@ -53,7 +53,7 @@
         <tbody>
             @foreach($attendanceData as $index => $data)
             @php 
-                $total = $data['hadir'] + $data['sakit'] + $data['izin'] + $data['alpha'];
+                $total = $data['hadir'] + $data['sakit'] + $data['izin'] + $data['alpa'];
                 $percentage = $data['total_pertemuan'] > 0 ? round(($data['hadir'] / $data['total_pertemuan']) * 100, 1) : 0;
             @endphp
             <tr>
@@ -62,7 +62,7 @@
                 <td>{{ $data['hadir'] }}</td>
                 <td>{{ $data['sakit'] }}</td>
                 <td>{{ $data['izin'] }}</td>
-                <td style="{{ $data['alpha'] > 0 ? 'color: red;' : '' }}">{{ $data['alpha'] }}</td>
+                <td style="{{ $data['alpa'] > 0 ? 'color: red;' : '' }}">{{ $data['alpa'] }}</td>
                 <td>{{ $data['total_pertemuan'] }}</td>
                 <td style="font-weight: bold;">{{ $percentage }}%</td>
             </tr>

@@ -26,7 +26,7 @@
             <!-- Student List -->
             <div class="space-y-4">
                 @foreach($students as $student)
-                @php $status = $attendance->get($student->id)->status ?? 'alpha'; @endphp
+                @php $status = $attendance->get($student->id)->status ?? 'alpa'; @endphp
                 <div class="glass-card p-5 rounded-[2.5rem] border-white/5 group hover:border-indigo-500/30 transition-all duration-500" id="student-row-{{ $student->id }}">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-4">
@@ -36,7 +36,7 @@
                             <div>
                                 <h3 class="text-white font-black text-sm leading-tight mb-1 truncate max-w-[150px]">{{ $student->nama_siswa }}</h3>
                                 <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest" id="status-label-{{ $student->id }}">
-                                    Status: <span class="status-text uppercase {{ $status === 'hadir' ? 'text-emerald-400' : ($status === 'alpha' ? 'text-rose-500' : 'text-amber-400') }}">{{ $status }}</span>
+                                    Status: <span class="status-text uppercase {{ $status === 'hadir' ? 'text-emerald-400' : ($status === 'alpa' ? 'text-rose-500' : 'text-amber-400') }}">{{ $status }}</span>
                                 </span>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                             <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                             <span class="text-[8px] font-black uppercase tracking-tighter">Izin</span>
                         </button>
-                        <button onclick="updateStatus({{ $student->id }}, 'alpha')" class="btn-status flex flex-col items-center justify-center aspect-square rounded-2xl border border-white/5 bg-white/5 text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 hover:border-rose-500/30 transition-all duration-300 {{ $status === 'alpha' ? 'active-status-alpha' : '' }}">
+                        <button onclick="updateStatus({{ $student->id }}, 'alpa')" class="btn-status flex flex-col items-center justify-center aspect-square rounded-2xl border border-white/5 bg-white/5 text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 hover:border-rose-500/30 transition-all duration-300 {{ $status === 'alpa' ? 'active-status-alpa' : '' }}">
                             <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                             <span class="text-[8px] font-black uppercase tracking-tighter">Alpha</span>
                         </button>
@@ -71,7 +71,7 @@
         .active-status-hadir { background: rgba(16, 185, 129, 0.2) !important; color: #10b981 !important; border-color: rgba(16, 185, 129, 0.4) !important; }
         .active-status-sakit { background: rgba(245, 158, 11, 0.2) !important; color: #f59e0b !important; border-color: rgba(245, 158, 11, 0.4) !important; }
         .active-status-izin { background: rgba(99, 102, 241, 0.2) !important; color: #6366f1 !important; border-color: rgba(99, 102, 241, 0.4) !important; }
-        .active-status-alpha { background: rgba(244, 63, 94, 0.2) !important; color: #f43f5e !important; border-color: rgba(244, 63, 94, 0.4) !important; }
+        .active-status-alpa { background: rgba(244, 63, 94, 0.2) !important; color: #f43f5e !important; border-color: rgba(244, 63, 94, 0.4) !important; }
     </style>
 
     <script>
@@ -98,11 +98,14 @@
                     // Update text and color
                     textSpan.textContent = status;
                     textSpan.className = "status-text uppercase " + 
-                        (status === 'hadir' ? 'text-emerald-400' : (status === 'alpha' ? 'text-rose-500' : 'text-amber-400'));
+                        (status === 'hadir' ? 'text-emerald-400' : (status === 'alpa' ? 'text-rose-500' : 'text-amber-400'));
                     
                     // Update active button styles
                     row.querySelectorAll('.btn-status').forEach(btn => {
-                        btn.className = btn.className.replace(/active-status-\w+/g, '').trim();
+                        // Remove all possible active classes
+                        btn.classList.remove('active-status-hadir', 'active-status-sakit', 'active-status-izin', 'active-status-alpa');
+                        
+                        // Check if this button matches the NEW status
                         if(btn.onclick.toString().includes(`'${status}'`)) {
                             btn.classList.add(`active-status-${status}`);
                         }

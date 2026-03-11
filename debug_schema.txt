@@ -1,1 +1,0 @@
-["id","nama_kelas","tahun_ajaran_id","wali_kelas_id","created_at","updated_at"]

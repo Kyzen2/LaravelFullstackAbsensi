@@ -1,8 +1,0 @@
-USER NOT FOUND with serial_number: 0081506973
-
-TOTAL USERS: 4
-SAMPLE USERS:
-- Name: Administrator | Serial: admin
-- Name: Budi Guru | Serial: 123456
-- Name: Andi Siswa | Serial: 223344
-- Name: Test Student | Serial: TEST12345

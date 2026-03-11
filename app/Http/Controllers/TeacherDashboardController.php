@@ -266,7 +266,7 @@ class TeacherDashboardController extends Controller
         $request->validate([
             'sesi_id' => 'required|exists:sesi_presensi,id',
             'siswa_id' => 'required|exists:siswa,id',
-            'status' => 'required|in:hadir,sakit,izin,alpha'
+            'status' => 'required|in:hadir,sakit,izin,alpa'
         ]);
 
         $sesi = SesiPresensi::findOrFail($request->sesi_id);
@@ -323,7 +323,7 @@ class TeacherDashboardController extends Controller
                 'hadir' => $records->where('status', 'hadir')->count(),
                 'sakit' => $records->where('status', 'sakit')->count(),
                 'izin' => $records->where('status', 'izin')->count(),
-                'alpha' => $records->where('status', 'alpha')->count(),
+                'alpa' => $records->where('status', 'alpa')->count(),
                 'total_pertemuan' => $sessionCount
             ];
         }
