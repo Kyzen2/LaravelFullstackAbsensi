@@ -7,11 +7,21 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AttendanceController;
 use Illuminate\Support\Facades\Artisan;
 
+/**
+ * File routes/web.php ini adalah "peta" aplikasi.
+ * Semua URL yang diketik di browser akan dicocokkan di sini 
+ * untuk menentukan Controller mana yang akan jalan.
+ */
+
+// Halaman depan (Welcome)
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Grup Route yang butuh Login (Middleware 'auth')
 Route::middleware(['auth'])->group(function () {
+    
+    // Rute khusus Guru
     Route::get('/teacher/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
     Route::get('/teacher/schedule', [TeacherDashboardController::class, 'schedule'])->name('teacher.schedule');
     Route::get('/teacher/attendance', [TeacherDashboardController::class, 'attendanceIndex'])->name('teacher.attendance.index');
@@ -23,20 +33,27 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/teacher/qr-refresh/{sesi}', [TeacherDashboardController::class, 'refreshToken'])->name('teacher.qr.refresh');
     Route::get('/teacher/qr/{jadwal}', [TeacherDashboardController::class, 'generateQr'])->name('teacher.qr');
 
+    // Rute khusus Siswa
     Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
     Route::get('/student/scan', [StudentDashboardController::class, 'scan'])->name('student.scan');
     Route::get('/student/history', [StudentDashboardController::class, 'history'])->name('student.history');
     
+    // Rute khusus Admin
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/master', [AdminDashboardController::class, 'masterData'])->name('admin.master.data');
     
-    // Admin Directories
-    Route::get('/admin/students', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('admin.students.index');
-    Route::get('/admin/teachers', [App\Http\Controllers\Admin\TeacherController::class, 'index'])->name('admin.teachers.index');
+    // Admin Directories (Direktori Guru/Siswa)
+    Route::resource('/admin/students', App\Http\Controllers\Admin\StudentController::class)->names('admin.students');
+    Route::resource('/admin/teachers', App\Http\Controllers\Admin\TeacherController::class)->names('admin.teachers');
     
+    // Proses Scan Presensi (API call dari Mobile/Scan View)
     Route::post('/attendance/process', [AttendanceController::class, 'process'])->name('attendance.process');
 });
 
+/**
+ * Pengelolaan Dashboard dinamis: 
+ * Mengarahkan user ke dashboard yang sesuai dengan Role-nya (Guru/Siswa/Admin).
+ */
 Route::get('/dashboard', function () {
     $user = auth()->user();
     if ($user->isGuru()) {
@@ -49,10 +66,12 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Rute Standar Laravel Breeze (Profile Management)
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Import rute autentikasi (login, logout, register, dsb)
 require __DIR__.'/auth.php';

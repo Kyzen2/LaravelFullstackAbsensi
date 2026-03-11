@@ -15,24 +15,22 @@ use Illuminate\Support\Facades\DB;
 class ImportStudents extends Command
 {
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
+     * Konfigurasi Command: Nama command dan parameter yang diterima.
+     * Jalankan lewat: php artisan app:import-students "NAMA KELAS" --password=...
      */
     protected $signature = 'app:import-students {class_name=XII PPLG-RPL 2} {--password=password}';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * Deskripsi singkat tentang apa yang dilakukan perintah ini.
      */
     protected $description = 'Import student data from Zilabs API for a specific class';
 
     /**
-     * Execute the console command.
+     * Titik awal eksekusi command.
      */
     public function handle()
     {
+        // Set limit memory agar proses data besar tidak crash
         ini_set('memory_limit', '1G');
         $targetClass = trim($this->argument('class_name'));
         $this->info("Fetching data from API for class: $targetClass...");
@@ -41,6 +39,7 @@ class ImportStudents extends Command
         file_put_contents($logFile, "Starting import for: $targetClass\n");
 
         try {
+            // Tahap 1: Mengambil data dari API eksternal menggunakan library HTTP Laravel (Guzzle)
             $response = Http::timeout(120)->get('https://zieapi.zielabs.id/api/getsiswa', [
                 'tahun' => '2025'
             ]);
@@ -52,6 +51,7 @@ class ImportStudents extends Command
                 return 1;
             }
 
+            // Tahap 2:Parsing JSON dan filter data sesuai nama kelas yang di-input
             $json = $response->json();
             if (!isset($json['data'])) {
                 $msg = "Error: 'data' key not found in API response.";
@@ -65,7 +65,7 @@ class ImportStudents extends Command
             $this->info("Total records received: $total");
             file_put_contents($logFile, "Total records received: $total\n", FILE_APPEND);
 
-            // Filter data with trim and case-insensitive check
+            // Filter siswa yang 'nama_rombel'-nya pas dengan target class kita
             $filtered = array_filter($data, function ($item) use ($targetClass) {
                 if (!isset($item['nama_rombel'])) return false;
                 return trim($item['nama_rombel']) === $targetClass || 
@@ -80,20 +80,20 @@ class ImportStudents extends Command
 
             $this->info("Found $count students. Starting import...");
 
-            // Get active Tahun Ajaran
+            // Tahap 3: Persiapan database (Cari Tahun Ajaran dan Guru)
             $ta = TahunAjaran::where('status', true)->first();
             if (!$ta) {
                 $this->error("No active Tahun Ajaran found. Please seed the database first.");
                 return 1;
             }
 
-            // Get or create Kelas
             $guru = DB::table('guru')->first();
             if (!$guru) {
                 $this->error("No Guru found. Please seed the database first.");
                 return 1;
             }
 
+            // Cari ID Kelas, kalau belum ada dibuat dulu
             $kelasId = DB::table('kelas')->where('nama_kelas', $targetClass)->value('id');
             if (!$kelasId) {
                 $kelasId = DB::table('kelas')->insertGetId([
@@ -104,19 +104,22 @@ class ImportStudents extends Command
                     'updated_at' => now(),
                 ]);
             }
-            $kelas = (object)['id' => $kelasId];
 
+            // Progress Bar untuk tampilan di terminal
             $bar = $this->output->createProgressBar($count);
             $bar->start();
 
             $password = $this->option('password');
 
+            // Tahap 4: Import Looping dengan Database Transaction
+            // Transaction memastikan data masuk SEKALIGUS (User + Siswa + Anggota). 
+            // Kalau satu error, semuanya dibatalkan agar database tetap bersih.
             foreach ($filtered as $student) {
                 DB::transaction(function () use ($student, $kelasId, $password) {
                     $nisn = trim($student['nisn']);
                     $nama = trim($student['nama']);
 
-                    // 1. Create/Update User
+                    // a. Create/Update Akun User (identitas utama login)
                     $userId = DB::table('users')->where('serial_number', $nisn)->value('id');
                     if (!$userId) {
                         $userId = DB::table('users')->insertGetId([
@@ -134,7 +137,7 @@ class ImportStudents extends Command
                         ]);
                     }
 
-                    // 2. Create/Update Siswa
+                    // b. Create/Update Profil Siswa (data tambahan NISN, dsb)
                     $siswaId = DB::table('siswa')->where('user_id', $userId)->value('id');
                     if (!$siswaId) {
                         $siswaId = DB::table('siswa')->insertGetId([
@@ -151,7 +154,7 @@ class ImportStudents extends Command
                         ]);
                     }
 
-                    // 3. Associate with Class
+                    // c. Hubungkan Siswa ke Kelas (Mapping Anggota Kelas)
                     DB::table('anggota_kelas')->updateOrInsert(
                         [
                             'siswa_id' => $siswaId,

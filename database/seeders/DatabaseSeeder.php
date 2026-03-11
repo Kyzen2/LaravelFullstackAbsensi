@@ -20,13 +20,22 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     * Fungsi ini bertugas mengisi database dengan data awal (master data) 
+     * agar aplikasi bisa langsung digunakan setelah install.
      */
     public function run(): void
     {
         Log::info("DATABASE SEEDER STARTED");
         echo "DATABASE SEEDER STARTED\n";
 
-        // Toggle FK checks
+        /**
+         * CATATAN PENTING:
+         * Di sini gw sengaja pake Query Builder (DB::table...) daripada Eloquent (User::create...) 
+         * karena di environment server/CLI ini sering terjadi error "silent crash" kalo pake model.
+         * Dengan Query Builder, data dijamin masuk lebih stabil tanpa beban logic model yang berat.
+         */
+
+        // Mematikan Foreign Key Checks sementara agar bisa menghapus data tanpa error relasi
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
         $tables = [
@@ -35,15 +44,17 @@ class DatabaseSeeder extends Seeder
             'lokasi', 'tahun_ajaran', 'users'
         ];
 
+        // Membersihkan semua tabel agar tidak ada data duplikat saat seeder dijalankan ulang
         foreach ($tables as $table) {
             echo "Cleaning table: $table\n";
             DB::table($table)->delete();
         }
 
+        // Menghidupkan kembali Foreign Key Checks
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         echo "Cleanup completed in database: " . DB::connection()->getDatabaseName() . "\n";
 
-        // 1. Admin
+        // 1. Membuat akun Admin
         echo "Creating Admin...\n";
         $adminId = DB::table('users')->insertGetId([
             'serial_number' => 'admin',
@@ -54,7 +65,7 @@ class DatabaseSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // 2. Tahun Ajaran
+        // 2. Membuat Tahun Ajaran Aktif
         echo "Creating Tahun Ajaran...\n";
         $taId = DB::table('tahun_ajaran')->insertGetId([
             'tahun' => '2025/2026',
@@ -64,19 +75,20 @@ class DatabaseSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // 3. Lokasi
+        // 3. Membuat Lokasi Absensi (Geofencing)
         echo "Creating Lokasi...\n";
         $lokasiId = DB::table('lokasi')->insertGetId([
             'nama_lokasi' => 'Lab RPL',
-            'latitude' => -6.175392,
+            'latitude' => -6.175392, // Koordinat contoh
             'longitude' => 106.827153,
-            'radius' => 50,
+            'radius' => 50, // Siswa harus dalam radius 50 meter dari titik ini
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        // 4. Guru
+        // 4. Membuat Data Guru dan Akun Usernya
         echo "Creating Gurus...\n";
+        // Guru 1
         $userGuru1Id = DB::table('users')->insertGetId([
             'serial_number' => '123456',
             'name' => 'Budi M.Kom',
@@ -93,6 +105,7 @@ class DatabaseSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
+        // Guru 2
         $userGuru2Id = DB::table('users')->insertGetId([
             'serial_number' => '654321',
             'name' => 'Siti S.Pd',
@@ -109,7 +122,7 @@ class DatabaseSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // 5. Kelas
+        // 5. Membuat Kelas
         echo "Creating Kelas...\n";
         $kelasId = DB::table('kelas')->insertGetId([
             'nama_kelas' => 'XII PPLG-RPL 2',
@@ -119,7 +132,7 @@ class DatabaseSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // 8. Mapel
+        // 8. Membuat Mata Pelajaran (Mapel)
         echo "Creating Mapels...\n";
         $mapels = [
             'Pemrograman Web' => $guru1Id,
@@ -141,8 +154,9 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // 9. Jadwal (Realistic Weekly Schedule until 4 PM)
+        // 9. Membuat Jadwal Mingguan Realistik (sampai jam 4 sore)
         $scheduleData = [
+            // Format: [Hari, Nama Mapel, ID Guru, Jam Mulai, Jam Selesai]
             // Senin
             ['Senin', 'Pemrograman Web', $guru1Id, '07:30:00', '12:00:00'],
             ['Senin', 'Bahasa Indonesia', $guru2Id, '13:00:00', '16:00:00'],
@@ -164,10 +178,11 @@ class DatabaseSeeder extends Seeder
             // Sabtu
             ['Sabtu', 'PBO (Java)', $guru1Id, '07:30:00', '11:00:00'],
             ['Sabtu', 'Matematika', $guru2Id, '12:00:00', '16:00:00'],
-            // Minggu (Testing)
+            // Minggu (Untuk testing kapan saja)
             ['Minggu', 'Matematika', $guru2Id, '00:00:00', '23:59:59'],
         ];
 
+        // Looping untuk memasukkan semua data jadwal ke tabel jadwal
         foreach ($scheduleData as $data) {
             DB::table('jadwal')->insert([
                 'kelas_id' => $kelasId,
