@@ -80,15 +80,21 @@
                                 <p class="text-xs text-slate-500 font-medium leading-relaxed">{{ $category->description ?? 'Indikator penilaian kompetensi.' }}</p>
                             </div>
                             
-                            <div class="star-rating">
-                                @for($i = 5; $i >= 1; $i--)
-                                <input type="radio" id="star-{{ $category->id }}-{{ $i }}" name="scores[{{ $category->id }}]" value="{{ $i }}" required>
-                                <label for="star-{{ $category->id }}-{{ $i }}" title="{{ $i }} Bintang">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                    </svg>
-                                </label>
-                                @endfor
+                            <div class="flex flex-col items-end gap-3">
+                                <div class="star-rating">
+                                    @for($i = 5; $i >= 1; $i--)
+                                    <input type="radio" id="star-{{ $category->id }}-{{ $i }}" name="scores[{{ $category->id }}]" value="{{ $i }}" required
+                                           onchange="updateRatingLabel(this, '{{ $category->id }}')">
+                                    <label for="star-{{ $category->id }}-{{ $i }}" title="{{ $i }} Bintang">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                        </svg>
+                                    </label>
+                                    @endfor
+                                </div>
+                                <span id="label-{{ $category->id }}" class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] opacity-0 transition-opacity duration-300">
+                                    Pilih Nilai
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -120,4 +126,28 @@
             </form>
         </div>
     </div>
+    <script>
+        const ratingLabels = {
+            1: 'Sangat Buruk',
+            2: 'Buruk',
+            3: 'Cukup',
+            4: 'Baik',
+            5: 'Sangat Baik'
+        };
+
+        function updateRatingLabel(input, categoryId) {
+            const labelElement = document.getElementById(`label-${categoryId}`);
+            const score = input.value;
+            
+            labelElement.textContent = ratingLabels[score];
+            labelElement.classList.remove('opacity-0');
+            labelElement.classList.add('opacity-100');
+            
+            // Animasi kecil saat berubah
+            labelElement.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                labelElement.style.transform = 'scale(1)';
+            }, 100);
+        }
+    </script>
 </x-app-layout>

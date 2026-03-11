@@ -33,14 +33,19 @@
                 </h1>
                 
                 <div class="hidden sm:flex items-center gap-6 mr-8 ml-auto">
-                    <a href="{{ route('dashboard') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('dashboard*') || request()->routeIs('teacher.dashboard') || request()->routeIs('student.dashboard') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Beranda</a>
+                    <a href="{{ route('dashboard') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('dashboard*') || request()->routeIs('teacher.dashboard') || request()->routeIs('student.dashboard') || request()->routeIs('admin.dashboard') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Beranda</a>
+                    @if(auth()->user()->isAdmin())
+                    <a href="{{ route('admin.master.data') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('admin.master.data') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Master</a>
+                    @endif
                     @if(auth()->user()->isGuru())
                     <a href="{{ route('teacher.schedule') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('teacher.schedule') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Jadwal</a>
                     <a href="{{ route('teacher.attendance.index') }}" class="text-xs font-black uppercase tracking-widest {{ request()->is('teacher/attendance*') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Rekap</a>
+                    <a href="{{ route('teacher.assessments.index') }}" class="text-xs font-black uppercase tracking-widest {{ request()->is('teacher/assessments*') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Nilai</a>
                     @endif
                     @if(auth()->user()->isSiswa())
                     <a href="{{ route('student.scan') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('student.scan') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Scan</a>
                     <a href="{{ route('student.history') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('student.history') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Riwayat</a>
+                    <a href="{{ route('student.assessments.index') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('student.assessments*') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Laporan</a>
                     @endif
                 </div>
 

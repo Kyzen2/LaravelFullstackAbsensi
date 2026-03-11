@@ -8,14 +8,66 @@
     <div class="py-10 pb-32 uppercase tracking-tight">
         <div class="max-w-7xl mx-auto px-6">
             
+            <!-- Filter Section -->
+            <div class="mb-10 animate-fade-in">
+                <form action="{{ route('student.assessments.index') }}" method="GET" id="filterForm" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 items-end">
+                    <!-- Filter Bulan -->
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2 block">Bulan</label>
+                        <div class="relative group">
+                            <select name="month" onchange="document.getElementById('filterForm').submit()" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-5 text-xs font-bold text-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all cursor-pointer">
+                                <option value="" class="bg-slate-900 text-white">SEMUA BULAN</option>
+                                @foreach(range(1, 12) as $m)
+                                    <option value="{{ $m }}" {{ request('month') == $m ? 'selected' : '' }} class="bg-slate-900 text-white">
+                                        {{ strtoupper(\Carbon\Carbon::create()->month($m)->translatedFormat('F')) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Filter Tahun -->
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2 block">Tahun</label>
+                        <div class="relative group">
+                            <select name="year" onchange="document.getElementById('filterForm').submit()" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-5 text-xs font-bold text-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all cursor-pointer">
+                                @foreach($availableYears as $year)
+                                    <option value="{{ $year }}" {{ $selectedYear == $year ? 'selected' : '' }} class="bg-slate-900 text-white">{{ $year }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Pilih Sesi Penilaian -->
+                    @if($history->count() > 0)
+                    <div class="space-y-2 md:col-span-1 lg:col-span-2">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2 block">Pilih Sesi Penilaian</label>
+                        <div class="relative group">
+                            <select name="assessment_id" onchange="document.getElementById('filterForm').submit()" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-5 text-xs font-bold text-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all cursor-pointer">
+                                <option value="" class="bg-slate-900 text-white">TERBARU DARI FILTER</option>
+                                @foreach($history as $item)
+                                <option value="{{ $item->id }}" {{ request('assessment_id') == $item->id ? 'selected' : '' }} class="bg-slate-900 text-white">
+                                    {{ strtoupper($item->period) }} - GURU: {{ strtoupper($item->evaluator->name) }} ({{ $item->assessment_date->translatedFormat('d F Y') }})
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    @endif
+                </form>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <!-- Left: Radar Chart -->
                 <div class="glass-card rounded-[40px] border-white/5 p-10 flex flex-col items-center justify-center relative overflow-hidden">
                     <div class="absolute -right-16 -top-16 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full"></div>
                     
                     <div class="text-center mb-10 relative z-10">
-                        <h3 class="text-2xl font-black text-white mb-2">Grafik Radar Performa</h3>
-                        <p class="text-xs text-slate-500 font-bold uppercase tracking-widest">Analisis kekuatan dan area pengembangan diri.</p>
+                        <h3 class="text-2xl font-black text-white mb-2">Grafik Radar Kompetensi</h3>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-widest">Rata-rata performa berdasarkan semua penilaian guru.</p>
                     </div>
 
                     <div class="w-full aspect-square max-w-md relative z-10 p-4">
@@ -36,7 +88,9 @@
                     <div class="glass-card rounded-[40px] border-indigo-500/20 bg-indigo-500/5 p-10 relative overflow-hidden">
                          <div class="flex items-start justify-between mb-8">
                             <div>
-                                <span class="px-4 py-2 bg-indigo-500/20 rounded-full border border-indigo-500/20 text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4 inline-block">Penilaian Terbaru</span>
+                                <span class="px-4 py-2 bg-indigo-500/20 rounded-full border border-indigo-500/20 text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4 inline-block">
+                                    {{ request('assessment_id') ? 'Detail Penilaian' : 'Penilaian Terbaru' }}
+                                </span>
                                 <h2 class="text-4xl font-black text-white tracking-tighter uppercase">{{ $latestAssessment->period }}</h2>
                             </div>
                             <div class="text-right">

@@ -25,6 +25,21 @@
                 <!-- Session Status -->
                 <x-auth-session-status class="mb-4" :status="session('status')" />
 
+                <!-- Validation Errors (General Warning) -->
+                @if ($errors->any())
+                    <div class="mb-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 animate-shake">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center text-rose-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-[10px] font-black text-rose-500 uppercase tracking-widest">Login Gagal</h4>
+                                <p class="text-[10px] font-bold text-rose-400 uppercase tracking-tight">Cek kembali Serial ID/Password anda.</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ route('login') }}" class="space-y-6">
                     @csrf
 
@@ -38,6 +53,7 @@
                             <input id="serial_number" type="text" name="serial_number" :value="old('serial_number')" required autofocus placeholder="Masukkan No. Induk" 
                                 class="block w-full pl-14 pr-6 py-4 bg-white/5 border border-white/5 rounded-2xl focus:bg-white/10 focus:border-indigo-500/50 focus:ring-0 transition-all duration-300 font-bold text-white placeholder:text-slate-600 shadow-inner" />
                         </div>
+                        <x-input-error :messages="$errors->get('serial_number')" />
                     </div>
 
                     <!-- Password -->
@@ -50,6 +66,7 @@
                             <input id="password" type="password" name="password" required autocomplete="current-password" placeholder="••••••••"
                                 class="block w-full pl-14 pr-6 py-4 bg-white/5 border border-white/5 rounded-2xl focus:bg-white/10 focus:border-indigo-500/50 focus:ring-0 transition-all duration-300 font-bold text-white placeholder:text-slate-600 shadow-inner" />
                         </div>
+                        <x-input-error :messages="$errors->get('password')" />
                     </div>
 
                     <div class="flex items-center justify-between px-1">
