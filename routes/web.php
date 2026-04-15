@@ -70,6 +70,65 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/gamification/items', [App\Http\Controllers\Admin\GamificationController::class, 'storeItem'])->name('admin.gamification.items.store');
     Route::delete('/admin/gamification/items/{item}', [App\Http\Controllers\Admin\GamificationController::class, 'destroyItem'])->name('gamification.items.destroy');
     
+    // Trigger Manual Auto-ALPA (Admin Only)
+    Route::post('/admin/gamification/run-alpa-scan', function () {
+        $today = \Carbon\Carbon::today();
+        $now = \Carbon\Carbon::now();
+        
+        $hariMap = [
+            'Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu', 'Sunday' => 'Minggu',
+        ];
+        $hariIni = $hariMap[$today->format('l')] ?? $today->format('l');
+
+        // Cari jadwal hari ini yang jam_selesai sudah lewat
+        $jadwals = \App\Models\Jadwal::with(['kelas.anggotaKelas.siswa.user', 'mapel'])
+            ->where('hari', $hariIni)
+            ->where('jam_selesai', '<=', $now->format('H:i:s'))
+            ->get();
+
+        $totalMarked = 0;
+
+        foreach ($jadwals as $jadwal) {
+            // Cari atau buat sesi presensi untuk jadwal ini hari ini
+            $sesi = \App\Models\SesiPresensi::firstOrCreate(
+                ['jadwal_id' => $jadwal->id, 'tanggal' => $today->toDateString()],
+                ['token_qr' => 'AUTO-ALPA-' . \Illuminate\Support\Str::random(8)]
+            );
+
+            // Ambil siswa yg SUDAH absen di sesi ini
+            $sudahAbsen = \App\Models\Absensi::where('sesi_id', $sesi->id)->pluck('siswa_id')->toArray();
+
+            // Loop semua anggota kelas
+            foreach ($jadwal->kelas->anggotaKelas as $anggota) {
+                if (in_array($anggota->siswa_id, $sudahAbsen)) continue;
+                
+                $siswa = $anggota->siswa;
+                if (!$siswa || !$siswa->user) continue;
+                $user = $siswa->user;
+
+                // Buat record ALPA
+                \App\Models\Absensi::create([
+                    'sesi_id' => $sesi->id, 'siswa_id' => $siswa->id,
+                    'waktu_scan' => null, 'status' => 'alpa', 'is_valid' => false,
+                ]);
+
+                // Potong poin -5
+                $user->point_balance -= 5;
+                $user->save();
+
+                \App\Models\PointLedger::create([
+                    'user_id' => $user->id, 'transaction_type' => 'PENALTY',
+                    'amount' => -5, 'current_balance' => $user->point_balance,
+                    'description' => "Auto ALPA: Tidak hadir - " . ($jadwal->mapel->nama_mapel ?? 'N/A') . " ({$jadwal->kelas->nama_kelas})",
+                ]);
+                $totalMarked++;
+            }
+        }
+
+        return back()->with('success', "Scan ALPA selesai! {$totalMarked} siswa ditandai ALPA dan dipotong poin hari ini ({$hariIni}).");
+    })->name('admin.gamification.run-alpa');
+    
     // Proses Scan Presensi (API call dari Mobile/Scan View)
     Route::post('/attendance/process', [AttendanceController::class, 'process'])->name('attendance.process');
 });
