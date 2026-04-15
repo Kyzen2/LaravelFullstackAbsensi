@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
     // Admin Directories (Direktori Guru/Siswa)
     Route::resource('/admin/students', App\Http\Controllers\Admin\StudentController::class)->names('admin.students');
     Route::resource('/admin/teachers', App\Http\Controllers\Admin\TeacherController::class)->names('admin.teachers');
+    Route::resource('/admin/jadwal', App\Http\Controllers\Admin\JadwalController::class)->names('admin.jadwal');
     Route::resource('/admin/assessment-categories', App\Http\Controllers\Admin\AssessmentCategoryController::class)->names('admin.assessment-categories');
     
     // Gamification & Flexibility

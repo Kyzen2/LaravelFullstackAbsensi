@@ -62,6 +62,77 @@
                 </div>
             </div>
 
+            <!-- LEADERBOARD SECTION -->
+            <div class="mt-10">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 border border-amber-500/20">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-white tracking-tight">Leaderboard Integritas</h3>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Top 10 Siswa Terdisiplin</p>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2 bg-indigo-500/10 rounded-full border border-indigo-500/20">
+                        <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Rankmu: #{{ $myRank }}</span>
+                    </div>
+                </div>
+
+                @if($leaderboard->count() > 0)
+                <div class="glass-card rounded-[32px] overflow-hidden border border-white/5">
+                    @foreach($leaderboard as $index => $leader)
+                    @php
+                        $isMe = $leader->id === auth()->id();
+                        $rankEmojis = ['🥇', '🥈', '🥉'];
+                        $rankColors = [
+                            0 => ['bg' => 'bg-amber-500/10', 'border' => 'border-amber-500/20', 'text' => 'text-amber-400', 'avatar' => 'bg-amber-500 text-amber-950'],
+                            1 => ['bg' => 'bg-slate-400/10', 'border' => 'border-slate-400/20', 'text' => 'text-slate-300', 'avatar' => 'bg-slate-400 text-slate-900'],
+                            2 => ['bg' => 'bg-amber-700/10', 'border' => 'border-amber-700/20', 'text' => 'text-amber-600', 'avatar' => 'bg-amber-700 text-amber-100'],
+                        ];
+                        $isTop3 = $index < 3;
+                        $colors = $rankColors[$index] ?? null;
+                    @endphp
+                    <div class="flex items-center gap-4 px-5 sm:px-6 py-4 border-b border-white/5 last:border-0 transition-colors {{ $isMe ? 'bg-indigo-500/5 border-l-2 border-l-indigo-500' : 'hover:bg-white/[0.02]' }} {{ $isTop3 ? $colors['bg'] : '' }}">
+                        {{-- Rank Number --}}
+                        <div class="w-9 shrink-0 text-center">
+                            @if($isTop3)
+                                <span class="text-xl">{{ $rankEmojis[$index] }}</span>
+                            @else
+                                <span class="text-sm font-black text-slate-500 tabular-nums">#{{ $index + 1 }}</span>
+                            @endif
+                        </div>
+
+                        {{-- Avatar --}}
+                        <div class="w-10 h-10 rounded-full {{ $isTop3 ? $colors['avatar'] : 'bg-slate-700 text-white' }} flex items-center justify-center text-sm font-black shrink-0">
+                            {{ strtoupper(substr($leader->name, 0, 1)) }}
+                        </div>
+
+                        {{-- Name --}}
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-bold {{ $isTop3 ? 'text-white' : 'text-slate-300' }} text-sm truncate">
+                                {{ $leader->name }}
+                                @if($isMe) <span class="text-indigo-400 text-[9px] font-black uppercase tracking-widest ml-1">(Kamu)</span> @endif
+                            </h4>
+                        </div>
+
+                        {{-- Points --}}
+                        <div class="text-right shrink-0">
+                            <div class="font-black {{ $isTop3 ? $colors['text'] : 'text-white' }} text-base tabular-nums">{{ $leader->point_balance }}</div>
+                            <div class="text-[8px] text-slate-500 font-bold uppercase tracking-widest">Poin</div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @else
+                <div class="glass-card p-10 rounded-[32px] text-center border-dashed border-white/10">
+                    <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4 text-3xl">🏆</div>
+                    <h3 class="text-white font-bold mb-1">Belum Ada Peringkat</h3>
+                    <p class="text-slate-500 text-sm">Leaderboard akan muncul setelah siswa mulai mengumpulkan poin integritas.</p>
+                </div>
+                @endif
+            </div>
+
             <!-- GAMIFICATION TABS/SECTIONS -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
                 

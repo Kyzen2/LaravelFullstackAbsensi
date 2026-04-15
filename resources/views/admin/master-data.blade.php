@@ -115,7 +115,7 @@
                             <h3 class="text-2xl font-black text-white tracking-tight mb-2">Jadwal Pelajaran</h3>
                             <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-relaxed">Master jadwal mingguan untuk semua kelas dan guru.</p>
                         </div>
-                        <a href="#" class="flex items-center gap-2 text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
+                        <a href="{{ route('admin.jadwal.index') }}" class="flex items-center gap-2 text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
                             Atur Jadwal <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                         </a>
                     </div>

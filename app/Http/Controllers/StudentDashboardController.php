@@ -7,6 +7,7 @@ use App\Models\SesiPresensi;
 use App\Models\FlexibilityItem;
 use App\Models\PointLedger;
 use App\Models\UserToken;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,7 +50,19 @@ class StudentDashboardController extends Controller
         $marketItems = FlexibilityItem::where('is_active', true)->get();
         $inventory = UserToken::with('item')->where('user_id', $user->id)->latest()->get();
 
-        return view('student.dashboard', compact('recentAttendance', 'stats', 'pointBalance', 'ledgers', 'marketItems', 'inventory'));
+        // LEADERBOARD: Top 10 siswa dengan poin tertinggi
+        $leaderboard = User::where('role', 'siswa')
+            ->where('point_balance', '>', 0)
+            ->orderByDesc('point_balance')
+            ->take(10)
+            ->get();
+        
+        // Cari ranking user saat ini
+        $myRank = User::where('role', 'siswa')
+            ->where('point_balance', '>', $user->point_balance)
+            ->count() + 1;
+
+        return view('student.dashboard', compact('recentAttendance', 'stats', 'pointBalance', 'ledgers', 'marketItems', 'inventory', 'leaderboard', 'myRank'));
     }
 
     /**
