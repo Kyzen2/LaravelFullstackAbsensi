@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Absensi;
 use App\Models\SesiPresensi;
+use App\Models\FlexibilityItem;
+use App\Models\PointLedger;
+use App\Models\UserToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,7 +42,61 @@ class StudentDashboardController extends Controller
                 ->count(),
         ];
 
-        return view('student.dashboard', compact('recentAttendance', 'stats'));
+        // GAMIFICATION DATA
+        $user = Auth::user();
+        $pointBalance = $user->point_balance;
+        $ledgers = PointLedger::where('user_id', $user->id)->latest()->take(10)->get();
+        $marketItems = FlexibilityItem::where('is_active', true)->get();
+        $inventory = UserToken::with('item')->where('user_id', $user->id)->latest()->get();
+
+        return view('student.dashboard', compact('recentAttendance', 'stats', 'pointBalance', 'ledgers', 'marketItems', 'inventory'));
+    }
+
+    /**
+     * Membeli Token Kelonggaran di Marketplace menggunakan Poin
+     */
+    public function buyToken(Request $request, FlexibilityItem $item)
+    {
+        $user = Auth::user();
+
+        // 1. Cek Saldo
+        if ($user->point_balance < $item->point_cost) {
+            return back()->with('error', 'Saldo poin tidak cukup untuk membeli token ini.');
+        }
+
+        // 2. Cek Limit Stok / Bulan (jika disetting admin)
+        if ($item->stock_limit !== null) {
+            $boughtThisMonth = UserToken::where('user_id', $user->id)
+                ->where('item_id', $item->id)
+                ->whereMonth('created_at', now()->month)
+                ->count();
+            
+            if ($boughtThisMonth >= $item->stock_limit) {
+                return back()->with('error', 'Kamu sudah mencapai batas maksmimal pembelian token ini di bulan ini.');
+            }
+        }
+
+        // 3. Proses Pembayaran
+        $user->point_balance -= $item->point_cost;
+        $user->save();
+
+        // 4. Catat Mutasi Ledger
+        PointLedger::create([
+            'user_id' => $user->id,
+            'transaction_type' => 'SPEND',
+            'amount' => -$item->point_cost,
+            'current_balance' => $user->point_balance,
+            'description' => "Membeli Token: " . $item->item_name
+        ]);
+
+        // 5. Masukkan Token ke Tas (Inventory) Siswa
+        UserToken::create([
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+            'status' => 'AVAILABLE'
+        ]);
+
+        return back()->with('success', 'Yeay! Token "' . $item->item_name . '" berhasil dibeli dan masuk ke dompetmu.');
     }
 
     /**

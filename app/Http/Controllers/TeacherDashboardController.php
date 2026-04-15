@@ -130,7 +130,8 @@ class TeacherDashboardController extends Controller
     }
 
     /**
-     * Menghasilkan QR Code untuk jadwal tertentu.
+     * TAMPILKAN QR CODE
+     * Menampilkan halaman dengan QR Code untuk discan siswa.
      */
     public function generateQr(Jadwal $jadwal)
     {
@@ -152,7 +153,8 @@ class TeacherDashboardController extends Controller
     }
 
     /**
-     * Menampilkan daftar jadwal mengajar hari ini.
+     * LIHAT JADWAL
+     * Menampilkan daftar jadwal mengajar guru pada hari ini.
      */
     public function schedule()
     {
@@ -259,7 +261,9 @@ class TeacherDashboardController extends Controller
     }
 
     /**
-     * Menyimpan absensi manual (saat guru input Sakit, Izin, atau Alpha).
+     * INPUT MANUAL
+     * Dipakai jika ada siswa yang HP-nya rusak atau lupa bawa HP, 
+     * guru bisa langsung ngubah statusnya di web.
      */
     public function storeManualAttendance(Request $request)
     {

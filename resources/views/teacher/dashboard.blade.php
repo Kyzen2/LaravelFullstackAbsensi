@@ -87,7 +87,7 @@
                     @endphp
 
                     <div class="flex gap-2 w-full sm:w-auto relative z-10">
-                        @if($currentSesi)
+                        @if($currentSesi) 
                         <a href="{{ route('teacher.session.detail', $currentSesi) }}" class="flex-1 sm:flex-none px-6 py-3 rounded-2xl bg-emerald-500 text-white font-black text-[10px] uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20">
                             Kelola Kehadiran
                         </a>

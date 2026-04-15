@@ -7,6 +7,10 @@ use App\Models\SesiPresensi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller untuk mengelola semua proses terkait absensi siswa.
+ * Ini termasuk memproses scan QR dan menghitung jarak lokasi.
+ */
 class AttendanceController extends Controller
 {
     /**
@@ -16,7 +20,8 @@ class AttendanceController extends Controller
      */
     public function process(Request $request)
     {
-        // Validasi input: memastikan token QR dan koordinat GPS (lat, long) dikirim
+        // 1. Validasi Input
+        // Pastikan QR token dan GPS (latitude, longitude) sudah dikirim
         $request->validate([
             'token_qr' => 'required|string',
             'latitude' => 'required|numeric',
@@ -33,12 +38,13 @@ class AttendanceController extends Controller
             ]);
         }
         
-        // Tahap 1: Mencari sesi presensi berdasarkan Token QR yang di-scan
-        // Token ini harus valid dan tanggalnya harus hari ini.
+        // 2. Cari Sesi Aktif
+        // Nyari apakah ada sesi absen yang pake token ini dan tanggalnya hari ini.
         $sesi = SesiPresensi::where('token_qr', $request->token_qr)
             ->where('tanggal', now()->format('Y-m-d'))
             ->first();
 
+        // Kalau nggak ketemu, berarti QR-nya palsu atau sudah lama.
         if (!$sesi) {
             return response()->json([
                 'success' => false,
@@ -58,12 +64,11 @@ class AttendanceController extends Controller
             ]);
         }
 
-        // Tahap 3: Validasi Lokasi (Radius check)
-        // Kita bandingkan lokasi HP siswa dengan lokasi yang ditentukan di jadwal (Lab/Kelas)
+        // 4. Cek Radius (GPS)
+        // Kita hitung jarak antara HP siswa dengan titik lokasi (Lab/Kelas).
         $jadwal = $sesi->jadwal;
         $lokasi = $jadwal->lokasi;
         
-        // Memanggil fungsi calculateDistance untuk dapet jarak dalam meter
         $distance = $this->calculateDistance(
             $request->latitude, 
             $request->longitude, 
@@ -71,7 +76,7 @@ class AttendanceController extends Controller
             $lokasi->longitude
         );
 
-        // Jika jarak siswa lebih besar dari radius yang diizinkan (misal 50m)
+        // Kalau siswa kejauhan (melebihi radius), absen ditolak.
         if ($distance > $lokasi->radius) {
             return response()->json([
                 'success' => false,
@@ -79,17 +84,25 @@ class AttendanceController extends Controller
             ]);
         }
 
-        // Tahap 4: Mencatat Absensi ke Database
-        Absensi::create([
+
+        // INI ARRAY
+        // 5. Simpan ke Database
+        // Kalau semua lolos, catat status 'Hadir' untuk siswa tersebut.
+        $absensi = Absensi::create([
             'sesi_id' => $sesi->id,
             'siswa_id' => $siswa->id,
-            'waktu_scan' => now(), // Waktu tepat saat tombol absen ditekan
-            'status' => 'Hadir',
+            'waktu_scan' => now(), 
+            'status' => 'hadir',
             'is_valid' => true,
             'lat_siswa' => $request->latitude,
             'long_siswa' => $request->longitude,
         ]);
 
+        // 6. Jalankan Mesin Poin (Rule Engine & Auto-Token Interceptor)
+        $pointService = new \App\Services\AttendancePointService();
+        $pointService->evaluateAttendance($absensi);
+
+// INI PERCABANGAN
         return response()->json([
             'success' => true,
             'message' => 'Absensi berhasil dicatat.'

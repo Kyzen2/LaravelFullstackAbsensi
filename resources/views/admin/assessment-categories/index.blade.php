@@ -40,8 +40,8 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b border-white/5 bg-white/[0.02]">
-                                <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Nama Indikator</th>
-                                <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Deskripsi</th>
+                                <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Indikator</th>
+                                <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Deskripsi Indikator</th>
                                 <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Tipe</th>
                                 <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Status</th>
                                 <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-right">Aksi</th>
@@ -65,7 +65,7 @@
                                     @if($category->is_active)
                                     <div class="flex items-center gap-2">
                                         <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
-                                        <span class="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Aktif</span>
+                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Aktif</span>
                                     </div>
                                     @else
                                     <div class="flex items-center gap-2">

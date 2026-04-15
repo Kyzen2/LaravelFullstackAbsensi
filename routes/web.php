@@ -21,13 +21,16 @@ Route::get('/', function () {
 // Grup Route yang butuh Login (Middleware 'auth')
 Route::middleware(['auth'])->group(function () {
     
-    // Rute khusus Guru
+    // 1. DASHBOARD GURU
+    // Menampilkan halaman utama, jadwal mengajar, dan daftar kelas.
     Route::get('/teacher/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
     Route::get('/teacher/schedule', [TeacherDashboardController::class, 'schedule'])->name('teacher.schedule');
     Route::get('/teacher/attendance', [TeacherDashboardController::class, 'attendanceIndex'])->name('teacher.attendance.index');
     Route::get('/teacher/attendance/class/{kelas}', [TeacherDashboardController::class, 'classAttendanceDetail'])->name('teacher.attendance.class');
     Route::get('/teacher/session/{sesi}', [TeacherDashboardController::class, 'sessionDetail'])->name('teacher.session.detail');
     Route::post('/teacher/attendance/manual', [TeacherDashboardController::class, 'storeManualAttendance'])->name('teacher.attendance.manual');
+    // 2. SISTEM QR & REKAP PDF
+    // Mengatur pembuatan QR Code presensi dan download laporan PDF.
     Route::get('/teacher/reports', [TeacherDashboardController::class, 'reportIndex'])->name('teacher.reports.index');
     Route::get('/teacher/reports/export', [TeacherDashboardController::class, 'exportFilteredPdf'])->name('teacher.reports.export');
     Route::get('/teacher/export-pdf/{jadwal}', [TeacherDashboardController::class, 'exportPdf'])->name('teacher.export.pdf');
@@ -40,8 +43,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/teacher/assessments/evaluate/{studentUser}', [App\Http\Controllers\Teacher\AssessmentController::class, 'create'])->name('teacher.assessments.create');
     Route::post('/teacher/assessments/store', [App\Http\Controllers\Teacher\AssessmentController::class, 'store'])->name('teacher.assessments.store');
 
-    // Rute khusus Siswa
+    // 4. DASHBOARD SISWA
+    // Halaman utama siswa, fitur scan QR, dan riwayat absen.
     Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
+    Route::post('/student/gamification/buy/{item}', [StudentDashboardController::class, 'buyToken'])->name('student.gamification.buy');
     Route::get('/student/scan', [StudentDashboardController::class, 'scan'])->name('student.scan');
     Route::get('/student/history', [StudentDashboardController::class, 'history'])->name('student.history');
     
@@ -56,6 +61,13 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/admin/students', App\Http\Controllers\Admin\StudentController::class)->names('admin.students');
     Route::resource('/admin/teachers', App\Http\Controllers\Admin\TeacherController::class)->names('admin.teachers');
     Route::resource('/admin/assessment-categories', App\Http\Controllers\Admin\AssessmentCategoryController::class)->names('admin.assessment-categories');
+    
+    // Gamification & Flexibility
+    Route::get('/admin/gamification', [App\Http\Controllers\Admin\GamificationController::class, 'index'])->name('admin.gamification.index');
+    Route::post('/admin/gamification/rules', [App\Http\Controllers\Admin\GamificationController::class, 'storeRule'])->name('admin.gamification.rules.store');
+    Route::delete('/admin/gamification/rules/{rule}', [App\Http\Controllers\Admin\GamificationController::class, 'destroyRule'])->name('gamification.rules.destroy');
+    Route::post('/admin/gamification/items', [App\Http\Controllers\Admin\GamificationController::class, 'storeItem'])->name('admin.gamification.items.store');
+    Route::delete('/admin/gamification/items/{item}', [App\Http\Controllers\Admin\GamificationController::class, 'destroyItem'])->name('gamification.items.destroy');
     
     // Proses Scan Presensi (API call dari Mobile/Scan View)
     Route::post('/attendance/process', [AttendanceController::class, 'process'])->name('attendance.process');

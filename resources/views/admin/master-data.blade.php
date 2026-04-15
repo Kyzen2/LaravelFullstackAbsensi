@@ -137,6 +137,24 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- Gamification Management -->
+                <div class="glass-card p-10 rounded-[48px] border-white/5 group hover:bg-cyan-400/10 transition-all duration-500 relative overflow-hidden">
+                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-cyan-400/10 blur-3xl rounded-full group-hover:bg-cyan-400/20 transition-all duration-700"></div>
+                    <div class="relative z-10 space-y-6">
+                        <div class="w-16 h-16 bg-cyan-400/20 rounded-[20px] flex items-center justify-center text-cyan-300 border border-cyan-400/20">
+                            <!-- Game controller icon -->
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black text-white tracking-tight mb-2">Gamifikasi Toko</h3>
+                            <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-relaxed">Ekosistem poin aturan dan toko token saktinya.</p>
+                        </div>
+                        <a href="{{ route('admin.gamification.index') }}" class="flex items-center gap-2 text-[10px] font-black text-cyan-300 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
+                            Masuk Gamifikasi <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
