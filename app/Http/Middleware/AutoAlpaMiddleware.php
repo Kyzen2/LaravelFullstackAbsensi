@@ -20,7 +20,7 @@ class AutoAlpaMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // Jalankan pengecekan ALPA setiap request (Hapus Cache sementara untuk Debugging)
+        // Jalankan pengecekan ALPA langsung setiap request tanpa cache biar bener-bener otomatis & real-time
         $this->runAlpaScan();
 
         return $next($request);
@@ -37,51 +37,32 @@ class AutoAlpaMiddleware
         ];
         $hariIni = $hariMap[$today->format('l')] ?? $today->format('l');
 
-        \Log::info("=== AUTO-ALPA SCAN START [{$hariIni} {$now->format('H:i:s')}] ===");
-
         // Cari jadwal hari ini yang jam_selesai sudah lewat
         $jadwals = Jadwal::with(['kelas.anggotaKelas.siswa.user', 'mapel'])
             ->where('hari', $hariIni)
             ->where('jam_selesai', '<=', $now->format('H:i:s'))
             ->get();
 
-        \Log::info("  Menemukan " . $jadwals->count() . " jadwal selesai hari ini.");
-
         foreach ($jadwals as $jadwal) {
-            \Log::info("  Processing Jadwal: " . ($jadwal->mapel->nama_mapel ?? 'N/A') . " di " . $jadwal->kelas->nama_kelas . " (Selesai: {$jadwal->jam_selesai})");
-            
             // Buat/cari sesi presensi hari ini untuk jadwal ini
             $sesi = SesiPresensi::firstOrCreate(
                 ['jadwal_id' => $jadwal->id, 'tanggal' => $today->toDateString()],
                 ['token_qr' => 'AUTO-ALPA-' . Str::random(8)]
             );
 
-            // Siswa yang sudah punya record absensi (hadir/terlambat/alpa/apapun)
+            // Ambil daftar siswa yang sudah punya record (hadir/terlambat/alpa)
             $sudahAdaRecord = Absensi::where('sesi_id', $sesi->id)->pluck('siswa_id')->toArray();
 
-            // Loop anggota kelas, cari yang belum ada record sama sekali
-            if (!$jadwal->kelas || !$jadwal->kelas->anggotaKelas || $jadwal->kelas->anggotaKelas->isEmpty()) {
-                \Log::warning("    Skip: Tidak ada anggota kelas di " . $jadwal->kelas->nama_kelas);
-                continue;
-            }
+            if (!$jadwal->kelas || !$jadwal->kelas->anggotaKelas) continue;
             
             foreach ($jadwal->kelas->anggotaKelas as $anggota) {
-                if (in_array($anggota->siswa_id, $sudahAdaRecord)) {
-                    // \Log::info("    Siswa ID {$anggota->siswa_id} sudah ada record, skip.");
-                    continue;
-                }
+                if (in_array($anggota->siswa_id, $sudahAdaRecord)) continue;
 
                 $siswa = $anggota->siswa;
-                if (!$siswa || !$siswa->user) {
-                    \Log::error("    Siswa ID {$anggota->siswa_id} data user/siswa corrupt!");
-                    continue;
-                }
-                
+                if (!$siswa || !$siswa->user) continue;
                 $user = $siswa->user;
 
-                \Log::info("    🔥 Marking ALPA: {$user->name}");
-
-                // Buat record ALPA
+                // Eksekusi Penalty ALPA
                 Absensi::create([
                     'sesi_id' => $sesi->id,
                     'siswa_id' => $siswa->id,
@@ -90,21 +71,19 @@ class AutoAlpaMiddleware
                     'is_valid' => false,
                 ]);
 
-                // Potong poin -5
                 $user->point_balance -= 5;
                 $user->save();
 
-                // Catat ke Ledger
                 PointLedger::create([
                     'user_id' => $user->id,
                     'transaction_type' => 'PENALTY',
                     'amount' => -5,
                     'current_balance' => $user->point_balance,
-                    'description' => "Auto ALPA: Tidak hadir - " . ($jadwal->mapel->nama_mapel ?? 'N/A') . " ({$jadwal->kelas->nama_kelas})",
+                    'description' => "Auto ALPA: Kelewat jadwal " . ($jadwal->mapel->nama_mapel ?? 'N/A'),
                 ]);
+
+                \Log::info("[AutoAlpa] Marked {$user->name} as ALPA for {$jadwal->mapel->nama_mapel}");
             }
         }
-        
-        \Log::info("=== AUTO-ALPA SCAN END ===");
     }
 }
