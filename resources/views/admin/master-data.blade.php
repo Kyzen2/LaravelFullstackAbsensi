@@ -53,6 +53,23 @@
                     </div>
                 </div>
 
+                <!-- Tahun Ajaran Management -->
+                <div class="glass-card p-10 rounded-[48px] border-white/5 group hover:bg-violet-500/10 transition-all duration-500 relative overflow-hidden">
+                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-violet-500/10 blur-3xl rounded-full group-hover:bg-violet-500/20 transition-all duration-700"></div>
+                    <div class="relative z-10 space-y-6">
+                        <div class="w-16 h-16 bg-violet-500/20 rounded-[20px] flex items-center justify-center text-violet-400 border border-violet-500/20">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black text-white tracking-tight mb-2">Tahun Ajaran</h3>
+                            <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-relaxed">Kelola periode aktif, semester ganjil/genap sekolah.</p>
+                        </div>
+                        <a href="{{ route('admin.tahun-ajaran.index') }}" class="flex items-center gap-2 text-[10px] font-black text-violet-400 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
+                            Atur Periode <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+
                 <!-- Kelas Management -->
                 <div class="glass-card p-10 rounded-[48px] border-white/5 group hover:bg-amber-500/10 transition-all duration-500 relative overflow-hidden">
                     <div class="absolute -right-8 -top-8 w-32 h-32 bg-amber-500/10 blur-3xl rounded-full group-hover:bg-amber-500/20 transition-all duration-700"></div>
@@ -64,8 +81,8 @@
                             <h3 class="text-2xl font-black text-white tracking-tight mb-2">Kelas & Jurusan</h3>
                             <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-relaxed">Struktur kelas akademik dan pengelompokan jurusan.</p>
                         </div>
-                        <a href="#" class="flex items-center gap-2 text-[10px] font-black text-amber-400 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
-                            Kelola Struktur <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        <a href="{{ route('admin.kelas.index') }}" class="flex items-center gap-2 text-[10px] font-black text-amber-400 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
+                            Kelola Kelas <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                         </a>
                     </div>
                 </div>
@@ -81,28 +98,12 @@
                             <h3 class="text-2xl font-black text-white tracking-tight mb-2">Kurikulum</h3>
                             <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-relaxed">Daftar mata pelajaran dan konfigurasi silabus pengajaran.</p>
                         </div>
-                        <a href="#" class="flex items-center gap-2 text-[10px] font-black text-rose-400 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
+                        <a href="{{ route('admin.mapel.index') }}" class="flex items-center gap-2 text-[10px] font-black text-rose-400 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
                             Atur Silabus <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                         </a>
                     </div>
                 </div>
 
-                <!-- Lokasi Management -->
-                <div class="glass-card p-10 rounded-[48px] border-white/5 group hover:bg-slate-400/10 transition-all duration-500 relative overflow-hidden">
-                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-slate-500/10 blur-3xl rounded-full group-hover:bg-slate-500/20 transition-all duration-700"></div>
-                    <div class="relative z-10 space-y-6">
-                        <div class="w-16 h-16 bg-slate-500/20 rounded-[20px] flex items-center justify-center text-slate-400 border border-slate-500/20">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-black text-white tracking-tight mb-2">Geofencing</h3>
-                            <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-relaxed">Koordinat peta dan radius untuk absensi berbasis lokasi.</p>
-                        </div>
-                        <a href="#" class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] group-hover:gap-4 transition-all">
-                            Sinkronkan Lokasi <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                        </a>
-                    </div>
-                </div>
 
                 <!-- Schedule Management -->
                 <div class="glass-card p-10 rounded-[48px] border-white/5 group hover:bg-indigo-400/10 transition-all duration-500 relative overflow-hidden">

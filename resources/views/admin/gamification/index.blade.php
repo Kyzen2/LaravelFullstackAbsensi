@@ -1,6 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
+            <a href="{{ route('admin.master.data') }}" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 border border-white/10 hover:bg-white/10 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </a>
             <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
                 Master Hub / <span class="text-white">Gamifikasi & Fleksibilitas</span>
             </h2>
@@ -22,7 +25,7 @@
             </div>
             @endif
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
                 <!-- ============================== -->
                 <!-- RULE BUILDER SECTION           -->
                 <!-- ============================== -->
@@ -163,28 +166,6 @@
                     </div>
                 </div>
 
-            </div>
-
-            <!-- ============================== -->
-            <!-- AUTO-ALPA SCANNER              -->
-            <!-- ============================== -->
-            <div class="mt-8 glass-card rounded-[40px] border-white/5 overflow-hidden p-8 bg-gradient-to-r from-rose-950/30 to-slate-900/50 border border-rose-500/10">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 bg-rose-500/20 rounded-2xl flex items-center justify-center text-3xl border border-rose-500/20 shrink-0">💀</div>
-                        <div>
-                            <h2 class="text-xl font-bold text-rose-400 uppercase tracking-wider">Auto-ALPA Scanner</h2>
-                            <p class="text-slate-500 text-xs mt-1 leading-relaxed max-w-lg">Scan semua jadwal hari ini yang sudah lewat. Siswa yang <span class="text-rose-400 font-bold">tidak hadir</span> (tidak scan QR) akan otomatis ditandai <span class="text-rose-400 font-bold">ALPA</span> dan poinnya dipotong <span class="text-rose-400 font-bold">-5</span>. Sistem ini juga berjalan otomatis setiap jam.</p>
-                        </div>
-                    </div>
-                    <form action="{{ route('admin.gamification.run-alpa') }}" method="POST" onsubmit="return confirm('Jalankan scan ALPA sekarang? Semua siswa yang belum absen di jadwal yang sudah lewat akan langsung ditandai ALPA.');">
-                        @csrf
-                        <button type="submit" class="px-8 py-4 bg-rose-600 hover:bg-rose-700 text-white font-black text-sm uppercase tracking-widest rounded-2xl transition-all shadow-lg shadow-rose-500/20 whitespace-nowrap flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path></svg>
-                            Jalankan Scan ALPA
-                        </button>
-                    </form>
-                </div>
             </div>
 
         </div>

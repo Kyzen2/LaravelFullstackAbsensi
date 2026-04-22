@@ -57,8 +57,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/master', [AdminDashboardController::class, 'masterData'])->name('admin.master.data');
     
-    // Admin Directories (Direktori Guru/Siswa)
+    // Admin Directories (Direktori Guru/Siswa/Mapel)
+    Route::resource('/admin/tahun-ajaran', App\Http\Controllers\Admin\TahunAjaranController::class)->names('admin.tahun-ajaran');
+    Route::resource('/admin/kelas', App\Http\Controllers\Admin\KelasController::class)->names('admin.kelas');
+    Route::resource('/admin/mapel', App\Http\Controllers\Admin\MapelController::class)->names('admin.mapel');
+    Route::post('/admin/kelas/{kelas}/students', [App\Http\Controllers\Admin\KelasController::class, 'addStudent'])->name('admin.kelas.students.add');
+    Route::delete('/admin/kelas/{kelas}/students/{siswa}', [App\Http\Controllers\Admin\KelasController::class, 'removeStudent'])->name('admin.kelas.students.remove');
+
     Route::resource('/admin/students', App\Http\Controllers\Admin\StudentController::class)->names('admin.students');
+    Route::post('/admin/students/{student}/adjust-points', [App\Http\Controllers\Admin\StudentController::class, 'adjustPoints'])->name('admin.students.adjust-points');
     Route::resource('/admin/teachers', App\Http\Controllers\Admin\TeacherController::class)->names('admin.teachers');
     Route::resource('/admin/jadwal', App\Http\Controllers\Admin\JadwalController::class)->names('admin.jadwal');
     Route::resource('/admin/assessment-categories', App\Http\Controllers\Admin\AssessmentCategoryController::class)->names('admin.assessment-categories');
