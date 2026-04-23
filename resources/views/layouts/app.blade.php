@@ -48,6 +48,9 @@
                     <a href="{{ route('student.history') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('student.history') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Riwayat</a>
                     <a href="{{ route('student.assessments.index') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('student.assessments*') ? 'text-indigo-400' : 'text-slate-400 hover:text-white' }} transition-colors">Laporan</a>
                     @endif
+                    @if(auth()->user()->isGuru() || auth()->user()->isSiswa())
+                    <a href="{{ route('helpdesk.index') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('helpdesk*') ? 'text-rose-400' : 'text-slate-400 hover:text-white' }} transition-colors">Helpdesk</a>
+                    @endif
                 </div>
 
                 {{-- Logout Button Desktop/Header (Desktop Only) --}}

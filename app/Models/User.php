@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -88,5 +87,15 @@ class User extends Authenticatable
     public function receivedAssessments()
     {
         return $this->hasMany(Assessment::class, 'evaluatee_id');
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(HelpdeskTicket::class, 'user_id');
+    }
+
+    public function handledTickets()
+    {
+        return $this->hasMany(HelpdeskTicket::class, 'operator_id');
     }
 }

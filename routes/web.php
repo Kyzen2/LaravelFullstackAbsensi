@@ -57,6 +57,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/master', [AdminDashboardController::class, 'masterData'])->name('admin.master.data');
     
+    // --- Rute Baru: Admin Helpdesk ---
+    Route::get('/admin/helpdesk', [App\Http\Controllers\Admin\AdminHelpdeskController::class, 'index'])->name('admin.helpdesk.index');
+    Route::get('/admin/helpdesk/report/print', [App\Http\Controllers\Admin\AdminHelpdeskController::class, 'printReport'])->name('admin.helpdesk.print');
+    Route::get('/admin/helpdesk/{ticket}', [App\Http\Controllers\Admin\AdminHelpdeskController::class, 'show'])->name('admin.helpdesk.show');
+    Route::post('/admin/helpdesk/{ticket}/reply', [App\Http\Controllers\Admin\AdminHelpdeskController::class, 'reply'])->name('admin.helpdesk.reply');
+    Route::put('/admin/helpdesk/{ticket}/status', [App\Http\Controllers\Admin\AdminHelpdeskController::class, 'updateStatus'])->name('admin.helpdesk.status');
+
     // Admin Directories (Direktori Guru/Siswa/Mapel)
     Route::resource('/admin/tahun-ajaran', App\Http\Controllers\Admin\TahunAjaranController::class)->names('admin.tahun-ajaran');
     Route::resource('/admin/kelas', App\Http\Controllers\Admin\KelasController::class)->names('admin.kelas');
@@ -160,6 +167,18 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    // ==========================================
+    // 6. ROUTING HELPDESK PELAPOR (GURU & SISWA)
+    // ==========================================
+    Route::get('/helpdesk', [App\Http\Controllers\HelpdeskController::class, 'index'])->name('helpdesk.index');
+    Route::get('/helpdesk/create', [App\Http\Controllers\HelpdeskController::class, 'create'])->name('helpdesk.create');
+    Route::post('/helpdesk/store', [App\Http\Controllers\HelpdeskController::class, 'store'])->name('helpdesk.store');
+    Route::get('/helpdesk/search', [App\Http\Controllers\HelpdeskController::class, 'searchSimilar'])->name('helpdesk.search');
+    Route::get('/helpdesk/{ticket}', [App\Http\Controllers\HelpdeskController::class, 'show'])->name('helpdesk.show');
+    Route::post('/helpdesk/{ticket}/reply', [App\Http\Controllers\HelpdeskController::class, 'reply'])->name('helpdesk.reply');
+    Route::post('/helpdesk/{ticket}/rate', [App\Http\Controllers\HelpdeskController::class, 'rate'])->name('helpdesk.rate');
+    
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

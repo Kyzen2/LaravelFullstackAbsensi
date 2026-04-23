@@ -26,7 +26,6 @@ class AssessmentCategoryController extends Controller
             'description' => 'nullable|string',
             'type' => 'nullable|string',
         ]);
-        // dd('Debugging', $request->all());
 
         AssessmentCategory::create([
             'name' => $request->name,
